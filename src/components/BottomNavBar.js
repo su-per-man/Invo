@@ -1,29 +1,37 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
-import { AssessmentOutlined, ReceiptOutlined, TuneOutlined } from '@material-ui/icons';
+import Icon from '@material-ui/core/Icon'
 
 export default class BottomNavBar extends React.Component {
+    static propTypes = {
+        clickHandler: PropTypes.func,
+        menuConfig: PropTypes.array
+    };
     constructor(props) {
         super(props);
         this.state = {
             value: 0
         };
     }
+    handleClick = (event, newValue) => {
+        this.setState({
+            value: newValue
+        })
+        this.props.clickHandler(newValue);
+    };
     render() {
+        const actn = [
+            this.props.menuConfig.map(function (obj) {
+                return <BottomNavigationAction label={obj.id} icon={<Icon className={obj.icon} />} />
+            })
+        ]
         return (
-            <BottomNavigation
-                value={this.state.value}
-                onChange={(event, newValue) => {
-                    this.setState({
-                        value: newValue
-                    });
-                }}
-                showLabels
-            >
-                <BottomNavigationAction label="Dashboard" icon={<AssessmentOutlined />} />
-                <BottomNavigationAction label="Transactions" icon={<ReceiptOutlined />} />
-                <BottomNavigationAction label="Configure" icon={<TuneOutlined />} />
-            </BottomNavigation>
+            <div>
+                <BottomNavigation value={this.state.value} onChange={this.handleClick} showLabels>
+                    {actn}
+                </BottomNavigation>
+            </div>
         );
     }
 }
