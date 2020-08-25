@@ -1,25 +1,46 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import BottomNavBar from './components/BottomNavBar'
+import Dashboard from './components/Dashboard'
+import Transactions from './components/Transactions'
+import Configure from './components/Configure'
+import { Grow } from '@material-ui/core';
 
 const menuList = [
-  { id: "Dashboard", icon: "fa fa-pie-chart" },
-  { id: "Transactions", icon: "fa fa-exchange" },
-  { id: "Configure", icon: "fa fa-cogs" }
+  { id: "Dashboard", icon: "fa fa-pie-chart", link: <Dashboard /> },
+  { id: "Transactions", icon: "fa fa-exchange", link: <Transactions /> },
+  { id: "Configure", icon: "fa fa-cogs", link: <Configure /> }
 ]
 export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      clickedIndex: 0
+    }
+  }
   static propTypes = {
     menuConfig: PropTypes.array,
     clickHandler: PropTypes.func
   }
   changePage = (val) => {
-    // alert(val);
+    this.setState({
+      clickedIndex: val
+    })
   }
   render() {
     return (
       <div>
+        {
+          menuList.map((obj, i) =>
+            <Grow in={this.state.clickedIndex === i} style={{ transformOrigin: '0 0 0' }} unmountOnExit={true}>
+              <div hidden={this.state.clickedIndex !== i}>
+                {obj.link}
+              </div>
+            </Grow>
+          )
+        }
         <BottomNavBar menuConfig={menuList} clickHandler={this.changePage} />
-      </div>
+      </div >
     );
   }
 }

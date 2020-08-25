@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
+import { BottomNavigation, BottomNavigationAction, Paper } from '@material-ui/core';
 import Icon from '@material-ui/core/Icon'
 
 export default class BottomNavBar extends React.Component {
@@ -27,11 +27,11 @@ export default class BottomNavBar extends React.Component {
             })
         ]
         return (
-            <div>
+            <Paper>
                 <BottomNavigation value={this.state.value} onChange={this.handleClick} showLabels>
                     {actn}
                 </BottomNavigation>
-            </div>
+            </Paper>
         );
     }
 }
