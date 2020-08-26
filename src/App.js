@@ -4,7 +4,7 @@ import BottomNavBar from './components/BottomNavBar'
 import Dashboard from './components/Dashboard'
 import Transactions from './components/Transactions'
 import Configure from './components/Configure'
-import { Grow } from '@material-ui/core';
+import { Grow, Container } from '@material-ui/core';
 
 const menuList = [
   { id: "Dashboard", icon: "fa fa-pie-chart", link: <Dashboard /> },
@@ -29,18 +29,22 @@ export default class App extends React.Component {
   }
   render() {
     return (
-      <div>
-        {
-          menuList.map((obj, i) =>
-            <Grow in={this.state.clickedIndex === i} style={{ transformOrigin: '0 0 0' }} unmountOnExit={true}>
-              <div hidden={this.state.clickedIndex !== i}>
-                {obj.link}
-              </div>
-            </Grow>
-          )
-        }
-        <BottomNavBar menuConfig={menuList} clickHandler={this.changePage} />
-      </div >
+      <React.Fragment>
+        <Container maxWidth="md">
+          {
+            menuList.map((obj, i) =>
+              <Grow in={this.state.clickedIndex === i} style={{ transformOrigin: '0 0 0' }} unmountOnExit={true}>
+                <div hidden={this.state.clickedIndex !== i}>
+                  {obj.link}
+                </div>
+              </Grow>
+            )
+          }
+        </Container>
+        <div className="footer">
+          <BottomNavBar menuConfig={menuList} clickHandler={this.changePage} />
+        </div>
+      </React.Fragment>
     );
   }
 }
