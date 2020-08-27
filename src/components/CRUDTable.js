@@ -1,7 +1,9 @@
 import React from 'react'
 import {
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, Fab, Zoom, IconButton, Tooltip
 } from '@material-ui/core';
+
+import { Add, Edit, Delete } from '@material-ui/icons'
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
@@ -65,47 +67,72 @@ export default function StickyHeadTable() {
     setPage(0);
   };
 
+
   return (
-    <Paper>
-      <TableContainer>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-              return (
-                <TableRow hover tabIndex={-1} key={row.code}>
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format && typeof value === 'number' ? column.format(value) : value}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-    </Paper>
+    <React.Fragment>
+      <div className="fab">
+        <Zoom in={true} unmountOnExit={true} style={{ transitionDelay: '1s' }} >
+          <Tooltip title="Add" aria-label="add">
+            <Fab color="primary">
+              <Add />
+            </Fab>
+          </Tooltip>
+        </Zoom>
+      </div>
+      <Paper>
+        <TableContainer className="stickyTableContainer">
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell>Actions</TableCell>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                return (
+                  <TableRow hover tabIndex={-1} key={row.code}>
+                    <TableCell>
+                      <Tooltip title="Edit">
+                        <IconButton>
+                          <Edit fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete">
+                        <IconButton component="span">
+                          <Delete fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {column.format && typeof value === 'number' ? column.format(value) : value}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      </Paper>
+    </React.Fragment>
   );
 }

@@ -16,10 +16,17 @@ code {
     width: 100%;
 }
 
-.tableActionsFooter{
-    flex-shrink: 0;
-    margin-left: 2;
+.fab{
+    float: right;
+    width: 10%;
 }
-.tableActionsFooter i {
-    font-size: medium;
+
+.fab .MuiFab-root {
+    position: fixed;
+    bottom: 15vh;
+    cursor: pointer;
+    z-index: 100;
+}
+.stickyTableContainer{
+    max-height: 60vh;
 }
