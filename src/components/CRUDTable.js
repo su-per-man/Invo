@@ -2,8 +2,8 @@ import React from 'react'
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, Fab, Zoom, IconButton, Tooltip
 } from '@material-ui/core';
-
 import { Add, Edit, Delete } from '@material-ui/icons'
+import FormDialog from './FormDialog'
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
@@ -54,85 +54,98 @@ const rows = [
   createData('Brazil', 'BR', 210147125, 8515767),
 ];
 
-export default function StickyHeadTable() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+export default class StickyHeadTable extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      page: 0,
+      openDialog: false,
+      rowsPerPage: 10
+    }
+    this.handleDialog = this.handleDialog.bind(this, this.state.openDialog)
+  }
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  handleChangePage = (event, newPage) => {
+    this.setState({ page: newPage })
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
+  handleChangeRowsPerPage = (event) => {
+    this.setState({
+      page: 0,
+      rowsPerPage: +event.target.value
+    })
   };
 
+  handleDialog = (val) => {
+    this.setState({ openDialog: val })
+  }
 
-  return (
-    <React.Fragment>
-      <div className="fab">
-        <Zoom in={true} unmountOnExit={true} style={{ transitionDelay: '1s' }} >
-          <Tooltip title="Add" aria-label="add">
-            <Fab color="primary">
-              <Add />
-            </Fab>
-          </Tooltip>
-        </Zoom>
-      </div>
-      <Paper>
-        <TableContainer className="stickyTableContainer">
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell>Actions</TableCell>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                return (
-                  <TableRow hover tabIndex={-1} key={row.code}>
-                    <TableCell>
-                      <Tooltip title="Edit">
-                        <IconButton>
-                          <Edit fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Delete">
-                        <IconButton component="span">
-                          <Delete fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
+  render() {
+    return (
+      <React.Fragment>
+        <FormDialog trigger={this.state.openDialog} dialogHandler={this.handleDialog} />
+        <div className="fab">
+          <Zoom in={true} unmountOnExit={true} style={{ transitionDelay: '1s' }} >
+            <Tooltip title="Add">
+              <Fab color="primary"><Add /></Fab>
+            </Tooltip>
+          </Zoom>
+        </div>
+        <Paper>
+          <TableContainer className="stickyTableContainer">
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Actions</TableCell>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                    >
+                      {column.label}
                     </TableCell>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number' ? column.format(value) : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-      </Paper>
-    </React.Fragment>
-  );
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((row) => {
+                  return (
+                    <TableRow hover tabIndex={-1} key={row.code}>
+                      <TableCell>
+                        <Tooltip title="Edit">
+                          <IconButton onClick={this.handleDialog.bind(this, { mode: 'Edit', id: row.code })}>
+                            <Edit fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete">
+                          <IconButton onClick={this.handleDialog.bind(this, { mode: 'Delete', id: row.code })}>
+                            <Delete fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                      {columns.map((column) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {column.format && typeof value === 'number' ? column.format(value) : value}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            count={rows.length}
+            rowsPerPage={this.state.rowsPerPage}
+            page={this.state.page}
+            onChangePage={this.handleChangePage}
+            onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          />
+        </Paper>
+      </React.Fragment >
+    );
+  }
 }

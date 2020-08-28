@@ -25,9 +25,9 @@ export default class Transaction extends React.Component {
                         textColor="primary"
                         variant="fullWidth"
                     >
-                        <Tab label="Item One" />
-                        <Tab label="Item Two" />
-                        <Tab label="Item Three" />
+                        <Tab label="Warehouse" />
+                        <Tab label="Items" />
+                        <Tab label="People" />
                     </Tabs>
                 </AppBar>
                 <Box component="span" m={1}>
