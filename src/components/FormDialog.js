@@ -22,7 +22,7 @@ export default class FormDialog extends React.Component {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.props.dialogHandler} color="primary">Cancel</Button>
+                        <Button onClick={this.props.onDismiss} color="primary">Cancel</Button>
                     </DialogActions>
                 </Dialog>
             </React.Fragment >

@@ -62,7 +62,6 @@ export default class StickyHeadTable extends React.Component {
       openDialog: false,
       rowsPerPage: 10
     }
-    this.handleDialog = this.handleDialog.bind(this, this.state.openDialog)
   }
 
   handleChangePage = (event, newPage) => {
@@ -76,14 +75,17 @@ export default class StickyHeadTable extends React.Component {
     })
   };
 
-  handleDialog = (val) => {
-    this.setState({ openDialog: val })
+  handleDialogOpen = (val) => {
+    this.setState({ openDialog: true })
+  }
+  handleDialogDismiss = () => {
+    return (this.setState({ openDialog: false }));
   }
 
   render() {
     return (
       <React.Fragment>
-        <FormDialog trigger={this.state.openDialog} dialogHandler={this.handleDialog} />
+        <FormDialog trigger={this.state.openDialog} onDismiss={this.handleDialogDismiss} />
         <div className="fab">
           <Zoom in={true} unmountOnExit={true} style={{ transitionDelay: '1s' }} >
             <Tooltip title="Add">
@@ -113,12 +115,12 @@ export default class StickyHeadTable extends React.Component {
                     <TableRow hover tabIndex={-1} key={row.code}>
                       <TableCell>
                         <Tooltip title="Edit">
-                          <IconButton onClick={this.handleDialog.bind(this, { mode: 'Edit', id: row.code })}>
+                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: 'Edit', id: row.code })}>
                             <Edit fontSize="small" />
                           </IconButton>
                         </Tooltip>
                         <Tooltip title="Delete">
-                          <IconButton onClick={this.handleDialog.bind(this, { mode: 'Delete', id: row.code })}>
+                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: 'Delete', id: row.code })}>
                             <Delete fontSize="small" />
                           </IconButton>
                         </Tooltip>
