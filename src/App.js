@@ -5,6 +5,9 @@ import Dashboard from './components/Dashboard'
 import Transactions from './components/Transactions'
 import Configure from './components/Configure'
 import { Grow, Container } from '@material-ui/core';
+import temp from "./config/ConnectMongo";
+
+const x = new temp()
 
 const menuList = [
   { id: "Dashboard", icon: "fa fa-pie-chart", link: <Dashboard /> },
