@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
 
 let WarehouseSchema = mongoose.Schema({
     Name: {
@@ -9,4 +9,4 @@ let WarehouseSchema = mongoose.Schema({
     Location: String,
     Description: String
 })
-export default mongoose.model('Warehouse', WarehouseSchema)
+module.exports = mongoose.model('warehouses', WarehouseSchema)
