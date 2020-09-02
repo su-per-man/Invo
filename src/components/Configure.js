@@ -1,12 +1,20 @@
 import React from 'react'
 import CRUDTable from './CRUDTable'
-import { AppBar, Tabs, Tab, Box } from "@material-ui/core";
+import { AppBar, Tabs, Tab, Box } from "@material-ui/core"
+import axios from 'axios'
 
-export default class Transaction extends React.Component {
+export default class Configure extends React.Component {
     constructor(props) {
         super(props)
         this.state = { selectedIndex: 0 }
     }
+
+    componentDidMount() {
+        axios.get('/warehouses/').then(resp => {
+            console.log(resp.data)
+        })
+    }
+
     handleChange = (event, newValue) => {
         this.setState({
             selectedIndex: newValue

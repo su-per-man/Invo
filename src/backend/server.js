@@ -1,27 +1,25 @@
-let express = require('express');
-let mongoose = require('mongoose');
+let express = require('express')
+
 // let cors = require('cors');
-// let bodyParser = require('body-parser');
 
 // Express Route
 const warehouseRoute = require('./routes/warehouses.route')
 
 // Connecting mongoDB Database
-mongoose.Promise = global.Promise;
 require('./config/ConnectMongo');
 
 
 const app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
+app.use(express.json());
+app.use(express.urlencoded({
   extended: true
 }));
-app.use(cors());
+// app.use(cors());
 app.use('/warehouses', warehouseRoute)
 
 
 // PORT
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 const server = app.listen(port, () => {
   console.log('Connected to port ' + port)
 })
