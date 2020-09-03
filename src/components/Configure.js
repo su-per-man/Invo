@@ -13,7 +13,7 @@ export default class Configure extends React.Component {
     componentDidMount() {
         axios.get('/warehouses/').then(resp => {
             this.setState({ warehouses: resp.data })
-        })//.catch(e => this.setState({ warehouses: e.response.status }))
+        }).catch(e => this.setState({ warehouses: e.response.status }))
     }
 
     handleChange = (event, newValue) => {
