@@ -1,8 +1,9 @@
 import React from 'react'
 import CRUDTable from './CRUDTable'
-import { AppBar, Tabs, Tab, Box } from "@material-ui/core"
+import { AppBar, Tabs, Tab, Box, Snackbar } from "@material-ui/core"
+import { Alert, Skeleton } from '@material-ui/lab'
 import axios from 'axios'
-import Skeleton from 'react-loading-skeleton'
+import { File } from 'react-kawaii'
 
 export default class Configure extends React.Component {
     constructor(props) {
@@ -25,9 +26,14 @@ export default class Configure extends React.Component {
     renderBody = () => {
         switch (this.state.warehouses) {
             case null:
-                return <Skeleton count={10} height={50} />
+                return <Skeleton />
             case 500:
-                return alert(this.state.warehouses)
+                return <Box>
+                    <Box justifyContent="center" display="flex">
+                        <File size={200} mood="ko" color="#83D1FB" />
+                    </Box>
+                    <Alert severity="error" variant="outlined">Internal Server Down</Alert>
+                </Box>
             default:
                 return <CRUDTable rows={this.state.warehouses} />
         }
