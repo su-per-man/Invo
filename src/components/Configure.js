@@ -23,14 +23,13 @@ export default class Configure extends React.Component {
             selectedIndex: newValue
         })
     };
-    handleDeleteRow(collectionName, DocId) {
+    handleDeleteRow = (collectionName, DocId) => {
         axios.post('/warehouses/delete', { id: DocId }).then(resp => {
             this.setState({ warehouses: resp.data })
         }).catch(e => this.setState({ warehouses: e.response.status }))
     }
 
     renderBody = (status) => {
-        console.log("renderBody" + status)
         switch (status) {
             case null:
                 return <Skeleton count={5} height={50} />

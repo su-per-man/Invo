@@ -71,8 +71,9 @@ export default class StickyHeadTable extends React.Component {
       openConfirmDelete: false
     }));
   }
-  componentWillUpdate = () => {
-    console.log(this.props.rows)
+  handleDelete = () => {
+    this.props.onDelete(this.props.collectionName, this.state.id)
+    this.handleDialogDismiss()
   }
 
   render() {
@@ -88,7 +89,7 @@ export default class StickyHeadTable extends React.Component {
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleDialogDismiss} color="primary">Cancel</Button>
-            <Button onClick={this.props.onDelete.bind(this, this.props.collectionName, this.state.id)} color="secondary" autoFocus>Delete</Button>
+            <Button onClick={this.handleDelete} color="secondary" autoFocus>Delete</Button>
           </DialogActions>
         </Dialog>
 
