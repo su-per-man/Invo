@@ -1,6 +1,7 @@
 import React from 'react'
 import {
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, Fab, Zoom, IconButton, Tooltip
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, Fab, Zoom, IconButton, Tooltip,
+  Dialog, DialogActions, DialogTitle, DialogContent, Button, DialogContentText
 } from '@material-ui/core';
 import { Add, Edit, Delete } from '@material-ui/icons'
 import FormDialog from './FormDialog'
@@ -41,7 +42,9 @@ export default class StickyHeadTable extends React.Component {
     this.state = {
       page: 0,
       openDialog: false,
-      rowsPerPage: 10
+      openConfirmDelete: false,
+      rowsPerPage: 10,
+      id: null
     }
   }
 
@@ -56,16 +59,39 @@ export default class StickyHeadTable extends React.Component {
     })
   };
 
-  handleDialogOpen = (val) => {
-    this.setState({ openDialog: true })
+  handleDialogOpen = (param) => {
+    switch (param.mode) {
+      case 'Delete':
+        this.setState({ openConfirmDelete: true, id: param.id })
+    }
   }
   handleDialogDismiss = () => {
-    return (this.setState({ openDialog: false }));
+    return (this.setState({
+      openDialog: false,
+      openConfirmDelete: false
+    }));
+  }
+  componentWillUpdate = () => {
+    console.log(this.props.rows)
   }
 
   render() {
     return (
       <React.Fragment>
+
+        <Dialog open={this.state.openConfirmDelete} onClose={this.handleDialogDismiss}>
+          <DialogTitle>Are you sure?</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Deleting this will clear all history releated to this
+          </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleDialogDismiss} color="primary">Cancel</Button>
+            <Button onClick={this.props.onDelete.bind(this, this.props.collectionName, this.state.id)} color="secondary" autoFocus>Delete</Button>
+          </DialogActions>
+        </Dialog>
+
         <FormDialog trigger={this.state.openDialog} onDismiss={this.handleDialogDismiss} />
         <div className="fab">
           <Zoom in={true} unmountOnExit={true} style={{ transitionDelay: '1s' }} >
@@ -100,7 +126,7 @@ export default class StickyHeadTable extends React.Component {
                           </IconButton>
                         </Tooltip>
                         <Tooltip title="Delete">
-                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: 'Delete', id: row.id })}>
+                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: 'Delete', id: row._id })}>
                             <Delete fontSize="small" />
                           </IconButton>
                         </Tooltip>

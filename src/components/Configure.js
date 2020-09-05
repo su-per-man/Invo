@@ -1,8 +1,9 @@
 import React from 'react'
 import CRUDTable from './CRUDTable'
-import { AppBar, Tabs, Tab, Box, Snackbar } from "@material-ui/core"
-import { Alert, Skeleton } from '@material-ui/lab'
+import { AppBar, Tabs, Tab, Box } from "@material-ui/core"
+import { Alert } from '@material-ui/lab'
 import axios from 'axios'
+import Skeleton from 'react-loading-skeleton'
 import { File } from 'react-kawaii'
 
 export default class Configure extends React.Component {
@@ -22,22 +23,28 @@ export default class Configure extends React.Component {
             selectedIndex: newValue
         })
     };
+    handleDeleteRow(collectionName, DocId) {
+        axios.post('/warehouses/delete', { id: DocId }).then(resp => {
+            this.setState({ warehouses: resp.data })
+        }).catch(e => this.setState({ warehouses: e.response.status }))
+    }
 
-    renderBody = () => {
-        switch (this.state.warehouses) {
+    renderBody = (status) => {
+        console.log("renderBody" + status)
+        switch (status) {
             case null:
-                return <Skeleton />
+                return <Skeleton count={5} height={50} />
             case 500:
                 return <Box>
                     <Box justifyContent="center" display="flex">
-                        <File size={200} mood="ko" color="#83D1FB" />
+                        <File size={200} mood="sad" color="#83D1FB" />
                     </Box>
                     <Alert severity="error" variant="outlined">Internal Server Down</Alert>
                 </Box>
             default:
-                return <CRUDTable rows={this.state.warehouses} />
+                return <CRUDTable rows={this.state.warehouses} collectionName="warehouses" onDelete={this.handleDeleteRow} />
         }
-    }
+    };
 
     render() {
         return (
@@ -53,7 +60,7 @@ export default class Configure extends React.Component {
                     </AppBar>
                 </Box>
                 <Box>
-                    {this.renderBody}
+                    {this.renderBody(this.state.warehouses)}
                 </Box>
             </React.Fragment>
         );
