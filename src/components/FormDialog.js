@@ -25,11 +25,13 @@ export default class FormDialog extends React.Component {
                                             margin="dense"
                                             name={field.id}
                                             label={field.label}
-                                            defaultValue={this.props.mode == CRUDModes.Update ? this.props.formData[field.id] : null}
+                                            defaultValue={this.props.mode === CRUDModes.Update ? this.props.formData[field.id] : null}
                                             variant="outlined"
                                             autoComplete="off"
                                             fullWidth
                                         />
+                                        default:
+                                            return (console.log('Error in FormDialog'))
                                     }
                                 })
                             }
