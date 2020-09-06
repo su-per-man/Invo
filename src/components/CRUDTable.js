@@ -5,11 +5,18 @@ import {
 } from '@material-ui/core';
 import { Add, Edit, Delete } from '@material-ui/icons'
 import FormDialog from './FormDialog'
+import { DynamicForm } from '../SharedConstants'
+
+const CRUDModes = {
+  Create: 'Create',
+  Edit: 'Edit',
+  Delete: 'Delete',
+}
 
 const columns = [
-  { id: 'Name', label: 'Name' },
-  { id: 'Location', label: 'Location' },
-  { id: 'Description', label: 'Description' },
+  { id: 'Name', label: 'Name', objectType: DynamicForm.TextField },
+  { id: 'Location', label: 'Location', objectType: DynamicForm.TextField },
+  { id: 'Description', label: 'Description', objectType: DynamicForm.TextField },
 ];
 
 // function createData(name, code, population, size) {
@@ -41,7 +48,8 @@ export default class StickyHeadTable extends React.Component {
     super(props)
     this.state = {
       page: 0,
-      openDialog: false,
+      openCEDialog: false,
+      mode: null,
       openConfirmDelete: false,
       rowsPerPage: 10,
       id: null
@@ -60,19 +68,29 @@ export default class StickyHeadTable extends React.Component {
   };
 
   handleDialogOpen = (param) => {
+    this.setState({ mode: param.mode })
     switch (param.mode) {
-      case 'Delete':
+      case CRUDModes.Delete:
         this.setState({ openConfirmDelete: true, id: param.id })
+        break
+      case CRUDModes.Create:
+        this.setState({ openCEDialog: true })
+        break
+
     }
   }
   handleDialogDismiss = () => {
     return (this.setState({
-      openDialog: false,
+      openCEDialog: false,
       openConfirmDelete: false
     }));
   }
   handleDelete = () => {
     this.props.onDelete(this.props.collectionName, this.state.id)
+    this.handleDialogDismiss()
+  }
+  handleSave = () => {
+    this.props.onSave(this.props.mode)
     this.handleDialogDismiss()
   }
 
@@ -86,18 +104,19 @@ export default class StickyHeadTable extends React.Component {
             <DialogContentText>
               Deleting this will clear all history releated to this
           </DialogContentText>
+            <DialogActions>
+              <Button onClick={this.handleDialogDismiss} color="primary">Cancel</Button>
+              <Button onClick={this.handleDelete} color="secondary" variant="contained" disableElevation autoFocus>Delete</Button>
+            </DialogActions>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleDialogDismiss} color="primary">Cancel</Button>
-            <Button onClick={this.handleDelete} color="secondary" autoFocus>Delete</Button>
-          </DialogActions>
         </Dialog>
 
-        <FormDialog trigger={this.state.openDialog} onDismiss={this.handleDialogDismiss} />
+        <FormDialog trigger={this.state.openCEDialog} formFields={columns} title={this.state.mode}
+          onDismiss={this.handleDialogDismiss} onSave={this.handleSave} />
         <div className="fab">
           <Zoom in={true} unmountOnExit={true} style={{ transitionDelay: '1s' }} >
             <Tooltip title="Add">
-              <Fab color="primary"><Add /></Fab>
+              <Fab color="primary" onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Create })}><Add /></Fab>
             </Tooltip>
           </Zoom>
         </div>
@@ -122,12 +141,12 @@ export default class StickyHeadTable extends React.Component {
                     <TableRow hover tabIndex={-1} key={row.id}>
                       <TableCell>
                         <Tooltip title="Edit">
-                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: 'Edit', id: row.id })}>
+                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Edit, id: row.id })}>
                             <Edit fontSize="small" />
                           </IconButton>
                         </Tooltip>
                         <Tooltip title="Delete">
-                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: 'Delete', id: row._id })}>
+                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Delete, id: row._id })}>
                             <Delete fontSize="small" />
                           </IconButton>
                         </Tooltip>
