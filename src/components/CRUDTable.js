@@ -5,13 +5,7 @@ import {
 } from '@material-ui/core';
 import { Add, Edit, Delete } from '@material-ui/icons'
 import FormDialog from './FormDialog'
-import { DynamicForm } from '../SharedConstants'
-
-const CRUDModes = {
-  Create: 'Create',
-  Edit: 'Edit',
-  Delete: 'Delete',
-}
+import { DynamicForm, CRUDModes } from '../SharedConstants'
 
 const columns = [
   { id: 'Name', label: 'Name', objectType: DynamicForm.TextField },
@@ -50,6 +44,7 @@ export default class StickyHeadTable extends React.Component {
       page: 0,
       openCEDialog: false,
       mode: null,
+      formData: null,
       openConfirmDelete: false,
       rowsPerPage: 10,
       id: null
@@ -70,11 +65,14 @@ export default class StickyHeadTable extends React.Component {
   handleDialogOpen = (param) => {
     this.setState({ mode: param.mode })
     switch (param.mode) {
-      case CRUDModes.Delete:
-        this.setState({ openConfirmDelete: true, id: param.id })
-        break
       case CRUDModes.Create:
         this.setState({ openCEDialog: true })
+        break
+      case CRUDModes.Update:
+        this.setState({ openCEDialog: true, id: param.id, formData: param.rowData })
+        break
+      case CRUDModes.Delete:
+        this.setState({ openConfirmDelete: true, id: param.id })
         break
 
     }
@@ -93,6 +91,10 @@ export default class StickyHeadTable extends React.Component {
     switch (this.state.mode) {
       case CRUDModes.Create:
         this.props.onCreate(this.props.collectionName, formData)
+        break
+      case CRUDModes.Update:
+        this.props.onUpdate(this.props.collectionName, this.state.id, formData)
+        break
     }
     this.handleDialogDismiss()
   }
@@ -114,8 +116,9 @@ export default class StickyHeadTable extends React.Component {
           </DialogContent>
         </Dialog>
 
-        <FormDialog trigger={this.state.openCEDialog} formFields={columns} title={this.state.mode}
+        <FormDialog trigger={this.state.openCEDialog} formFields={columns} formData={this.state.formData} mode={this.state.mode}
           onDismiss={this.handleDialogDismiss} onSave={this.handleSave} />
+
         <div className="fab">
           <Zoom in={true} unmountOnExit={true} style={{ transitionDelay: '1s' }} >
             <Tooltip title="Add">
@@ -143,12 +146,12 @@ export default class StickyHeadTable extends React.Component {
                   return (
                     <TableRow hover tabIndex={-1} key={row.id}>
                       <TableCell>
-                        <Tooltip title="Edit">
-                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Edit, id: row.id })}>
+                        <Tooltip title={CRUDModes.Update}>
+                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Update, id: row._id, rowData: row })}>
                             <Edit fontSize="small" />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title="Delete">
+                        <Tooltip title={CRUDModes.Delete}>
                           <IconButton onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Delete, id: row._id })}>
                             <Delete fontSize="small" />
                           </IconButton>

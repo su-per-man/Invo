@@ -6,7 +6,8 @@ class ConnectMongo {
         mongoose.connect(process.env.CONNECTION_STRING, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            useCreateIndex: true
+            useCreateIndex: true,
+            useFindAndModify: false
         })
             .then(() => {
                 console.log('Connection Successful')

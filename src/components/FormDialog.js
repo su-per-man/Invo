@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle }
     from '@material-ui/core';
-import { DynamicForm } from '../SharedConstants'
+import { DynamicForm, CRUDModes } from '../SharedConstants'
 
 export default class FormDialog extends React.Component {
     handleSubmit = (e) => {
@@ -15,7 +15,7 @@ export default class FormDialog extends React.Component {
         return (
             <React.Fragment>
                 <Dialog open={this.props.trigger} onClose={this.props.onDismiss}>
-                    <DialogTitle>{this.props.title}</DialogTitle>
+                    <DialogTitle>{this.props.mode}</DialogTitle>
                     <DialogContent>
                         <form onSubmit={this.handleSubmit.bind(this)}>
                             {
@@ -25,6 +25,7 @@ export default class FormDialog extends React.Component {
                                             margin="dense"
                                             name={field.id}
                                             label={field.label}
+                                            defaultValue={this.props.mode == CRUDModes.Update ? this.props.formData[field.id] : null}
                                             variant="outlined"
                                             autoComplete="off"
                                             fullWidth

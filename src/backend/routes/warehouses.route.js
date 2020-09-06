@@ -15,25 +15,31 @@ router.route('/create').post((req, res, next) => {
 })
 
 //read
-router.route('/').get((req, res) => {
-    fetchAll(req, res)
+router.route('/').get((req, res, next) => {
+    fetchAll(req, res, next)
 })
 //edit
-router.route('/edit').post((req, res) => {
-
+router.route('/update').post((req, res, next) => {
+    warehouseSchema.findByIdAndUpdate(req.body.id, req.body.data, (err, data) => {
+        if (err) {
+            return next(err)
+        } else {
+            fetchAll(req, res, next)
+        }
+    })
 })
 
 //delete
 router.route('/delete').post((req, res, next) => {
     warehouseSchema.findByIdAndDelete(req.body.id, (err, data) => {
-        if (err) return next(error);
+        if (err) next(err);
         else {
-            fetchAll(req, res)
+            fetchAll(req, res, next)
         }
     })
 })
 
-fetchAll = (req, res) => {
+fetchAll = (req, res, next) => {
     warehouseSchema.find((err, data) => {
         if (err)
             return next(err)

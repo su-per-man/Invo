@@ -28,8 +28,10 @@ export default class Configure extends React.Component {
             this.setState({ warehouses: resp.data })
         }).catch(e => this.setState({ warehouses: e.response.status }))
     }
-    handleEditDoc = (collectionName, Doc) => {
-        alert('hi')
+    handleUpdateDoc = (collectionName, docID, doc) => {
+        axios.post('/warehouses/update', { id: docID, data: doc }).then(resp => {
+            this.setState({ warehouses: resp.data })
+        }).catch(e => this.setState({ warehouses: e.response.status }))
     }
     handleCreateDoc = (collectionName, doc) => {
         axios.post('/warehouses/create', doc).then(resp => {
@@ -50,7 +52,7 @@ export default class Configure extends React.Component {
                 </Box>
             default:
                 return <CRUDTable rows={this.state.warehouses} collectionName="warehouses"
-                    onCreate={this.handleCreateDoc} onDelete={this.handleDeleteDoc} onEdit={this.handleEditDoc} />
+                    onCreate={this.handleCreateDoc} onDelete={this.handleDeleteDoc} onUpdate={this.handleUpdateDoc} />
         }
     };
 
