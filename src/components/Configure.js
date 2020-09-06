@@ -23,8 +23,16 @@ export default class Configure extends React.Component {
             selectedIndex: newValue
         })
     };
-    handleDeleteRow = (collectionName, DocId) => {
-        axios.post('/warehouses/delete', { id: DocId }).then(resp => {
+    handleDeleteDoc = (collectionName, docID) => {
+        axios.post('/warehouses/delete', { id: docID }).then(resp => {
+            this.setState({ warehouses: resp.data })
+        }).catch(e => this.setState({ warehouses: e.response.status }))
+    }
+    handleEditDoc = (collectionName, Doc) => {
+        alert('hi')
+    }
+    handleCreateDoc = (collectionName, doc) => {
+        axios.post('/warehouses/create', doc).then(resp => {
             this.setState({ warehouses: resp.data })
         }).catch(e => this.setState({ warehouses: e.response.status }))
     }
@@ -41,7 +49,8 @@ export default class Configure extends React.Component {
                     <Alert severity="error" variant="outlined">Internal Server Down</Alert>
                 </Box>
             default:
-                return <CRUDTable rows={this.state.warehouses} collectionName="warehouses" onDelete={this.handleDeleteRow} />
+                return <CRUDTable rows={this.state.warehouses} collectionName="warehouses"
+                    onCreate={this.handleCreateDoc} onDelete={this.handleDeleteDoc} onEdit={this.handleEditDoc} />
         }
     };
 

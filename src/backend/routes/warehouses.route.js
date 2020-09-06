@@ -2,19 +2,28 @@ const express = require('express')
 const router = express.Router()
 
 const warehouseSchema = require('../models/Warehouse')
-const { getAllByAltText } = require('@testing-library/react')
 
-//create-warehouse
+//create
 router.route('/create').post((req, res, next) => {
     warehouseSchema.create(req.body, (err, data) => {
         if (err) {
             return next(err)
         } else {
-            res.json(data)
+            fetchAll(req, res)
         }
     })
 })
-//Delete
+
+//read
+router.route('/').get((req, res) => {
+    fetchAll(req, res)
+})
+//edit
+router.route('/edit').post((req, res) => {
+
+})
+
+//delete
 router.route('/delete').post((req, res, next) => {
     warehouseSchema.findByIdAndDelete(req.body.id, (err, data) => {
         if (err) return next(error);
@@ -22,10 +31,6 @@ router.route('/delete').post((req, res, next) => {
             fetchAll(req, res)
         }
     })
-})
-
-router.route('/').get((req, res) => {
-    fetchAll(req, res)
 })
 
 fetchAll = (req, res) => {

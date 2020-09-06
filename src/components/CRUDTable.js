@@ -89,8 +89,11 @@ export default class StickyHeadTable extends React.Component {
     this.props.onDelete(this.props.collectionName, this.state.id)
     this.handleDialogDismiss()
   }
-  handleSave = () => {
-    this.props.onSave(this.props.mode)
+  handleSave = (formData) => {
+    switch (this.state.mode) {
+      case CRUDModes.Create:
+        this.props.onCreate(this.props.collectionName, formData)
+    }
     this.handleDialogDismiss()
   }
 
