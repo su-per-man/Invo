@@ -1,0 +1,16 @@
+version: "3.0"
+services: 
+    invo:
+        build: .
+        ports: 
+            - "3500:3000"
+        stdin_open: true
+        tty: true
+        depends_on: 
+            - backend
+    backend:
+        image: "invo-backend:1.0"
+        # Not exposing backend to outside of the container
+        # ports: 
+        #     - "4500:4000"
+        container_name: "invo-backend"
