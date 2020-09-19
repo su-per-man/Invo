@@ -3,7 +3,7 @@ let express = require('express')
 // let cors = require('cors');
 
 // Express Route
-const warehouseRoute = require('./routes/warehouses.route')
+const apiRoute = require('./routes/RouteAPI')
 
 // Connecting mongoDB Database
 require('./config/ConnectMongo');
@@ -15,7 +15,7 @@ app.use(express.urlencoded({
   extended: true
 }));
 // app.use(cors());
-app.use('/warehouses', warehouseRoute)
+app.use('/invo-api', apiRoute)
 
 
 // PORT
