@@ -9,34 +9,43 @@ import { File } from 'react-kawaii'
 export default class Configure extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { selectedIndex: 0, warehouses: null }
+        this._configurableTabs = [
+            { label: "warehouses", value: "warehouse" },
+            { label: "items", value: "item" },
+            { label: "contacts", value: "contact" }
+        ]
+        this.state = { selectedTab: this._configurableTabs[0].value, dataVar: null }
     }
 
     componentDidMount() {
-        axios.get('/warehouses/').then(resp => {
-            this.setState({ warehouses: resp.data })
-        }).catch(e => this.setState({ warehouses: e.response.status }))
+        this.fetchAll()
+    }
+
+    fetchAll() {
+        axios.get('/invo-api/' + this.state.selectedTab).then(resp => {
+            this.setState({ dataVar: resp.data })
+        }).catch(e => this.setState({ dataVar: e.response.status }))
     }
 
     handleChange = (event, newValue) => {
         this.setState({
-            selectedIndex: newValue
-        })
+            selectedTab: newValue
+        },this.fetchAll)
     };
-    handleDeleteDoc = (collectionName, docID) => {
-        axios.post('/warehouses/delete', { id: docID }).then(resp => {
-            this.setState({ warehouses: resp.data })
-        }).catch(e => this.setState({ warehouses: e.response.status }))
+    handleDeleteDoc = (docID) => {
+        axios.post('/invo-api/delete-' + this.state.selectedTab, { id: docID }).then(resp => {
+            this.setState({ dataVar: resp.data })
+        }).catch(e => this.setState({ dataVar: e.response.status }))
     }
-    handleUpdateDoc = (collectionName, docID, doc) => {
-        axios.post('/warehouses/update', { id: docID, data: doc }).then(resp => {
-            this.setState({ warehouses: resp.data })
-        }).catch(e => this.setState({ warehouses: e.response.status }))
+    handleUpdateDoc = (docID, doc) => {
+        axios.post('/invo-api/update-' + this.state.selectedTab, { id: docID, data: doc }).then(resp => {
+            this.setState({ dataVar: resp.data })
+        }).catch(e => this.setState({ dataVar: e.response.status }))
     }
-    handleCreateDoc = (collectionName, doc) => {
-        axios.post('/warehouses/create', doc).then(resp => {
-            this.setState({ warehouses: resp.data })
-        }).catch(e => this.setState({ warehouses: e.response.status }))
+    handleCreateDoc = (doc) => {
+        axios.post('/invo-api/create-' + this.state.selectedTab, doc).then(resp => {
+            this.setState({ dataVar: resp.data })
+        }).catch(e => this.setState({ dataVar: e.response.status }))
     }
 
     renderBody = (status) => {
@@ -51,7 +60,7 @@ export default class Configure extends React.Component {
                     <Alert severity="error" variant="outlined">Internal Server Down</Alert>
                 </Box>
             default:
-                return <CRUDTable rows={this.state.warehouses} collectionName="warehouses"
+                return <CRUDTable rows={this.state.dataVar}
                     onCreate={this.handleCreateDoc} onDelete={this.handleDeleteDoc} onUpdate={this.handleUpdateDoc} />
         }
     };
@@ -62,15 +71,17 @@ export default class Configure extends React.Component {
                 <h1>Configure</h1>
                 <Box mb={3}>
                     <AppBar position="static" color="default">
-                        <Tabs value={this.state.selectedIndex} onChange={this.handleChange} indicatorColor="primary" textColor="primary" variant="fullWidth">
-                            <Tab label="Warehouses" />
-                            <Tab label="Items" />
-                            <Tab label="Contacts" />
+                        <Tabs value={this.state.selectedTab} onChange={this.handleChange} indicatorColor="primary" textColor="primary" variant="fullWidth">
+                            {
+                                this._configurableTabs.map((row) => {
+                                    return <Tab label={row.label} value={row.value} />;
+                                })
+                            }
                         </Tabs>
                     </AppBar>
                 </Box>
                 <Box>
-                    {this.renderBody(this.state.warehouses)}
+                    {this.renderBody(this.state.dataVar)}
                 </Box>
             </React.Fragment>
         );

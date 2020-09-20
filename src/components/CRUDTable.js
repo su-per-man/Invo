@@ -61,16 +61,16 @@ export default class StickyHeadTable extends React.Component {
     }));
   }
   handleDelete = () => {
-    this.props.onDelete(this.props.collectionName, this.state.id)
+    this.props.onDelete(this.state.id)
     this.handleDialogDismiss()
   }
   handleSave = (formData) => {
     switch (this.state.mode) {
       case CRUDModes.Create:
-        this.props.onCreate(this.props.collectionName, formData)
+        this.props.onCreate(formData)
         break
       case CRUDModes.Update:
-        this.props.onUpdate(this.props.collectionName, this.state.id, formData)
+        this.props.onUpdate(this.state.id, formData)
         break
       default:
         console.log('Error in CRUDTable')
