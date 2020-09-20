@@ -16,7 +16,7 @@
     "react-loading-skeleton": "^2.1.1",
     "react-scripts": "3.4.3"
   },
-  "proxy": "http://invo-backend:4000",
+  "proxy": "http://localhost:4000",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
