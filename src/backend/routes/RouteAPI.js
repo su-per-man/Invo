@@ -1,5 +1,4 @@
 const express = require('express')
-const { schema } = require('../models/Item')
 const router = express.Router()
 
 schemas = {
