@@ -8,5 +8,5 @@ let WarehouseSchema = mongoose.Schema({
     },
     Location: String,
     Description: String
-})
+}, { timestamps: true })
 module.exports = mongoose.model('warehouses', WarehouseSchema)

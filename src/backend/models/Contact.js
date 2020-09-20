@@ -6,5 +6,5 @@ let ContactSchema = new mongoose.Schema({
     Company: String,
     Location: String,
     Phone: String,
-})
+}, { timestamps: true })
 module.exports = mongoose.model('contacts', ContactSchema)

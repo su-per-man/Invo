@@ -7,5 +7,5 @@ let ItemSchema = mongoose.Schema({
         unique: true
     },
     Description: String
-})
+}, { timestamps: true })
 module.exports = mongoose.model('items', ItemSchema)
