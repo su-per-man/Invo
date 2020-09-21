@@ -30,7 +30,7 @@ export default class Configure extends React.Component {
     handleChange = (event, newValue) => {
         this.setState({
             selectedTab: newValue
-        },this.fetchAll)
+        }, this.fetchAll)
     };
     handleDeleteDoc = (docID) => {
         axios.post('/invo-api/delete-' + this.state.selectedTab, { id: docID }).then(resp => {
@@ -49,21 +49,26 @@ export default class Configure extends React.Component {
     }
 
     renderBody = (status) => {
-        switch (status) {
-            case null:
-                return <Skeleton count={5} height={50} />
-            case 500:
-                return <Box>
-                    <Box justifyContent="center" display="flex">
-                        <File size={200} mood="sad" color="#83D1FB" />
-                    </Box>
-                    <Alert severity="error" variant="outlined">Internal Server Down</Alert>
+        if (status === null)
+            return <Skeleton count={5} height={50} />
+        if (status === 500)
+            return <Box>
+                <Box justifyContent="center" display="flex">
+                    <File size={200} mood="sad" color="#83D1FB" />
                 </Box>
-            default:
-                return <CRUDTable rows={this.state.dataVar}
-                    onCreate={this.handleCreateDoc} onDelete={this.handleDeleteDoc} onUpdate={this.handleUpdateDoc} />
-        }
-    };
+                <Alert severity="error" variant="outlined">Internal Server Down</Alert>
+            </Box>
+        if (status.toString() === '')
+            return <Box>
+                <Box justifyContent="center" display="flex">
+                    <File size={200} mood="ko" color="#83D1FB" />
+                </Box>
+                <Alert severity="info" variant="outlined">Nothing is there!</Alert>
+            </Box>
+
+        return <CRUDTable rows={this.state.dataVar}
+            onCreate={this.handleCreateDoc} onDelete={this.handleDeleteDoc} onUpdate={this.handleUpdateDoc} />
+    }
 
     render() {
         return (
