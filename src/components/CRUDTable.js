@@ -1,17 +1,13 @@
 import React from 'react'
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, Fab, Zoom, IconButton, Tooltip,
-  Dialog, DialogActions, DialogTitle, DialogContent, Button, DialogContentText
+  Dialog, DialogActions, DialogTitle, DialogContent, Button, DialogContentText, Box
 } from '@material-ui/core';
 import { Add, Edit, Delete } from '@material-ui/icons'
+import { Alert } from '@material-ui/lab'
 import FormDialog from './FormDialog'
-import { DynamicForm, CRUDModes } from '../SharedConstants'
-
-const columns = [
-  { id: 'Name', label: 'Name', objectType: DynamicForm.TextField, required: true },
-  { id: 'Location', label: 'Location', objectType: DynamicForm.TextField },
-  { id: 'Description', label: 'Description', objectType: DynamicForm.TextField },
-];
+import { CRUDModes } from '../SharedConstants'
+import { File } from 'react-kawaii'
 
 export default class StickyHeadTable extends React.Component {
   constructor(props) {
@@ -77,6 +73,25 @@ export default class StickyHeadTable extends React.Component {
     }
     this.handleDialogDismiss()
   }
+  renderBody = () => {
+    switch (this.props.rows.length) {
+      case 0:
+        return <Box p={3}>
+          <Box justifyContent="center" display="flex">
+            <File size={200} mood="ko" color="#83D1FB" />
+          </Box>
+          <Alert severity="info" variant="outlined">Nothing is there!</Alert>
+        </Box>
+      default:
+        return <TablePagination
+          count={this.props.rows.length}
+          rowsPerPage={this.state.rowsPerPage}
+          page={this.state.page}
+          onChangePage={this.handleChangePage}
+          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+        />
+    }
+  }
 
   render() {
     return (
@@ -95,7 +110,7 @@ export default class StickyHeadTable extends React.Component {
           </DialogContent>
         </Dialog>
 
-        <FormDialog trigger={this.state.openCEDialog} formFields={columns} formData={this.state.formData} mode={this.state.mode}
+        <FormDialog trigger={this.state.openCEDialog} formFields={this.props.columns} formData={this.state.formData} mode={this.state.mode}
           onDismiss={this.handleDialogDismiss} onSave={this.handleSave} />
 
         <div className="fab">
@@ -111,7 +126,7 @@ export default class StickyHeadTable extends React.Component {
               <TableHead>
                 <TableRow>
                   <TableCell>Actions</TableCell>
-                  {columns.map((column) => (
+                  {this.props.columns.map((column) => (
                     <TableCell
                       key={column.id}
                     >
@@ -136,7 +151,7 @@ export default class StickyHeadTable extends React.Component {
                           </IconButton>
                         </Tooltip>
                       </TableCell>
-                      {columns.map((column) => {
+                      {this.props.columns.map((column) => {
                         return (
                           <TableCell>
                             {row[column.id]}
@@ -149,13 +164,7 @@ export default class StickyHeadTable extends React.Component {
               </TableBody>
             </Table>
           </TableContainer>
-          <TablePagination
-            count={this.props.rows.length}
-            rowsPerPage={this.state.rowsPerPage}
-            page={this.state.page}
-            onChangePage={this.handleChangePage}
-            onChangeRowsPerPage={this.handleChangeRowsPerPage}
-          />
+          {this.renderBody()}
         </Paper>
       </React.Fragment >
     );

@@ -5,14 +5,15 @@ import { Alert } from '@material-ui/lab'
 import axios from 'axios'
 import Skeleton from 'react-loading-skeleton'
 import { File } from 'react-kawaii'
+import { Configure_Warehouse, Configure_Item, Configure_Contact } from '../SharedConstants'
 
 export default class Configure extends React.Component {
     constructor(props) {
         super(props)
         this._configurableTabs = [
-            { label: "warehouses", value: "warehouse" },
-            { label: "items", value: "item" },
-            { label: "contacts", value: "contact" }
+            { label: "warehouses", value: "warehouse", columns: Configure_Warehouse },
+            { label: "items", value: "item", columns: Configure_Item },
+            { label: "contacts", value: "contact", columns: Configure_Contact }
         ]
         this.state = { selectedTab: this._configurableTabs[0].value, dataVar: null }
     }
@@ -51,23 +52,19 @@ export default class Configure extends React.Component {
     renderBody = (status) => {
         if (status === null)
             return <Skeleton count={5} height={50} />
-        if (status === 500)
+        else if (status === 500)
             return <Box>
                 <Box justifyContent="center" display="flex">
                     <File size={200} mood="sad" color="#83D1FB" />
                 </Box>
                 <Alert severity="error" variant="outlined">Internal Server Down</Alert>
             </Box>
-        if (status.toString() === '')
-            return <Box>
-                <Box justifyContent="center" display="flex">
-                    <File size={200} mood="ko" color="#83D1FB" />
-                </Box>
-                <Alert severity="info" variant="outlined">Nothing is there!</Alert>
-            </Box>
-
-        return <CRUDTable rows={this.state.dataVar}
-            onCreate={this.handleCreateDoc} onDelete={this.handleDeleteDoc} onUpdate={this.handleUpdateDoc} />
+        else
+            return <CRUDTable rows={this.state.dataVar} columns={
+                this._configurableTabs.filter((tab) => {
+                    return tab.value === this.state.selectedTab
+                })[0].columns
+            } onCreate={this.handleCreateDoc} onDelete={this.handleDeleteDoc} onUpdate={this.handleUpdateDoc} />
     }
 
     render() {
