@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, Fab, Zoom, IconButton, Tooltip,
-  Dialog, DialogActions, DialogTitle, DialogContent, Button, DialogContentText, Box
+  Dialog, DialogActions, DialogTitle, DialogContent, Button, DialogContentText, Box, TextField
 } from '@material-ui/core';
 import { Add, Edit, Delete } from '@material-ui/icons'
 import { Alert } from '@material-ui/lab'
@@ -19,7 +19,9 @@ export default class StickyHeadTable extends React.Component {
       formData: null,
       openConfirmDelete: false,
       rowsPerPage: 10,
-      id: null
+      id: null,
+      name: null,
+      deleteDisable: true
     }
   }
 
@@ -44,7 +46,7 @@ export default class StickyHeadTable extends React.Component {
         this.setState({ openCEDialog: true, id: param.id, formData: param.rowData })
         break
       case CRUDModes.Delete:
-        this.setState({ openConfirmDelete: true, id: param.id })
+        this.setState({ openConfirmDelete: true, deleteDisable: true, id: param.id, name: param.name })
         break
       default:
         console.log('Error in CRUDTable')
@@ -59,6 +61,10 @@ export default class StickyHeadTable extends React.Component {
   handleDelete = () => {
     this.props.onDelete(this.state.id)
     this.handleDialogDismiss()
+  }
+  handleConfirmDelete = (e) => {
+    if (e.target.value === this.state.name)
+      this.setState({ deleteDisable: false })
   }
   handleSave = (formData) => {
     switch (this.state.mode) {
@@ -103,9 +109,11 @@ export default class StickyHeadTable extends React.Component {
             <DialogContentText>
               Deleting this will clear all history releated to this
           </DialogContentText>
+            <TextField margin="dense" label={"Type " + this.state.name + " to confirm"} onChange={this.handleConfirmDelete}
+              variant="outlined" autoComplete="off" fullWidth />
             <DialogActions>
               <Button onClick={this.handleDialogDismiss} color="primary">Cancel</Button>
-              <Button onClick={this.handleDelete} color="secondary" variant="contained" disableElevation autoFocus>Delete</Button>
+              <Button onClick={this.handleDelete} disabled={this.state.deleteDisable} color="secondary" variant="contained" disableElevation autoFocus>Delete</Button>
             </DialogActions>
           </DialogContent>
         </Dialog>
@@ -146,7 +154,7 @@ export default class StickyHeadTable extends React.Component {
                           </IconButton>
                         </Tooltip>
                         <Tooltip title={CRUDModes.Delete}>
-                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Delete, id: row._id })}>
+                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Delete, id: row._id, name: row[Object.keys(row)[1]] })}>
                             <Delete fontSize="small" />
                           </IconButton>
                         </Tooltip>
