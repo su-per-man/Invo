@@ -65,6 +65,8 @@ export default class StickyHeadTable extends React.Component {
   handleConfirmDelete = (e) => {
     if (e.target.value === this.state.name)
       this.setState({ deleteDisable: false })
+    else
+      this.setState({ deleteDisable: true })
   }
   handleSave = (formData) => {
     switch (this.state.mode) {

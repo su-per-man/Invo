@@ -57,7 +57,7 @@ export default class Configure extends React.Component {
         let temp = e.request.response
         if (temp.includes("E11000"))
             this.setState({ showStatus: true, statusMessage: "Already exists. Duplicate is not allowed" })
-        else if (temp.includes("Proxy Error"))
+        else if (temp.includes("Proxy error:"))
             this.setState({ dataVar: "Proxy Error" })
     }
 
