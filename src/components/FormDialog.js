@@ -7,9 +7,9 @@ export default class FormDialog extends React.Component {
     handleSubmit = (e) => {
         e.preventDefault()
         let fd = new FormData(e.target)
-        let object = {}
-        fd.forEach((value, key) => { object[key] = value });
-        this.props.onSave(object)
+        let obj = {}
+        fd.forEach((value, key) => { obj[key] = value });
+        this.props.onSave(obj)
     }
     render() {
         return (
