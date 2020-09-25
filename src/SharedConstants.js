@@ -1,5 +1,8 @@
 export const DynamicForm = {
     TextField: 'TextField',
+    DateField: 'DateField',
+    SelectField: 'SelectField',
+    NumberType: 'number'
 }
 export const CRUDModes = {
     Create: 'Create',
@@ -25,3 +28,13 @@ export const Configure_Contact = [
     { id: 'Location', label: 'Location', objectType: DynamicForm.TextField, required: true },
     { id: 'Phone', label: 'Phone', objectType: DynamicForm.TextField }
 ];
+
+export const Transactions_Form = [
+    { id: 'TransactionDate', label: 'Transaction Date', objectType: DynamicForm.DateField, required: true },
+    { id: 'Warehouse', label: 'Warehouse', objectType: DynamicForm.SelectField, required: true, defaultValue: 1 },
+    { id: 'Contact', label: 'Buyer/Seller', objectType: DynamicForm.SelectField, required: true, defaultValue: -1 },
+    { id: 'TotalUnits', label: 'Total Units', objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.NumberType },
+    { id: 'Unit', label: 'Unit', objectType: DynamicForm.SelectField, required: true, defaultValue: 1 },
+    { id: 'CostPerUnit', label: 'Cost Per Unit', objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.NumberType },
+    { id: 'Item', label: 'Item', objectType: DynamicForm.SelectField, required: true, defaultValue: -1 },
+]
