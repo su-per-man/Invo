@@ -4,7 +4,8 @@ const router = express.Router()
 schemas = {
     warehouse: require('../models/Warehouse'),
     item: require('../models/Item'),
-    contact: require('../models/Contact')
+    contact: require('../models/Contact'),
+    transaction: require('../models/Transaction')
 }
 
 for (const sch in schemas) {
