@@ -20,6 +20,29 @@ export default class Transactions extends React.Component {
                 console.log(e)
             })
     }
+    fillDropdownValues(val) {
+        console.log(typeof (val))
+        if (typeof (val) === 'object') {
+            console.log(val)
+            // axios.get('/invo-api/fetch-field', {
+            //     params: {
+            //         collectionName: val[0],
+            //         fieldName: val[1]
+            //     }
+            // })
+            //     .then(resp => {
+            //         console.log(resp.data)
+            //     })
+            //     .catch(e => {
+            //         console.log(e)
+            //     })
+            return 'hi'
+        }
+        else
+            return val.split(';').map(tempVal => {
+                return <MenuItem value={tempVal}>{tempVal}</MenuItem>
+            })
+    }
     generateDynamicForm() {
         let dt = new Date()
         let month = dt.getMonth() + 1
@@ -40,10 +63,11 @@ export default class Transactions extends React.Component {
                         break;
                     case DynamicForm.SelectField:
                         rawObj = <FormControl variant="outlined" size="small" margin="dense" fullWidth>
-                            <Select name={field.id} value={(field.defaultValue === -1 ? -1 : -1)}
+                            <Select name={field.id} value={(field.defaultValue === undefined ? -1 : field.defaultValue)}
                             // onChange={handleChange}
                             >
                                 <MenuItem value="-1" disabled><em>{field.label}</em></MenuItem>
+                                {this.fillDropdownValues(field.dropdownValues)}
                             </Select>
                         </FormControl>
                         break;
