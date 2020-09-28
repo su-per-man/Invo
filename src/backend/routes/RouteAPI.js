@@ -47,6 +47,15 @@ for (const sch in schemas) {
     })
 }
 
+router.route('/fetch-field').post((req, res, next) => {
+    schemas[req.body.collectionParam].find({}, req.body.fieldParam, (err, data) => {
+        if (err)
+            return next(err)
+        else
+            return res.json(data)
+    })
+})
+
 fetchAll = (req, res, next, schemaName) => {
     schemas[schemaName].find((err, data) => {
         if (err)

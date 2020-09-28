@@ -10,13 +10,6 @@ export const CRUDModes = {
     Delete: 'Delete',
 }
 
-function fetchDynamicDropdownValues(coll, fl) {
-    return {
-        CollectionParam: coll,
-        FieldParam: fl
-    }
-}
-
 export const Configure_Warehouse = [
     { id: 'Name', label: 'Name', objectType: DynamicForm.TextField, required: true },
     { id: 'Location', label: 'Location', objectType: DynamicForm.TextField },
@@ -38,7 +31,7 @@ export const Configure_Contact = [
 
 export const Transactions_Form = [
     { id: 'TransactionDate', label: 'Transaction Date', objectType: DynamicForm.DateField, required: true },
-    { id: 'Warehouse', label: 'Warehouse', objectType: DynamicForm.SelectField, required: true, dropdownValues: [fetchDynamicDropdownValues('warehouses', 'Name')] },
+    { id: 'Warehouse', label: 'Warehouse', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['warehouse', 'Name'] }, //{ Name: 1, _id: 0 }
     { id: 'Contact', label: 'Buyer/Seller', objectType: DynamicForm.SelectField, required: true, dropdownValues: 'KG;Piece;Bundle' },
     { id: 'TotalUnits', label: 'Total Units', objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.NumberType },
     { id: 'Unit', label: 'Unit', objectType: DynamicForm.SelectField, required: true, dropdownValues: 'KG;Piece;Bundle', defaultValue: 'KG' },
