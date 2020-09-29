@@ -8,40 +8,40 @@ export default class Transactions extends React.Component {
     constructor() {
         super()
         this.state = {
-            selectedMode: "Buy"
+            selectedMode: "Buy",
+            dropdownValues: {},
+            mybody: null
         }
     }
     componentDidMount() {
-        axios.get('/invo-api/transaction')
-            .then(resp => {
-                console.log(resp.data)
-            })
-            .catch(e => {
-                console.log(e)
-            })
+        this.generateDynamicForm()
+        // axios.get('/invo-api/transaction')
+        //     .then(resp => {
+        //     })
+        //     .catch(e => {
+        //         console.log(e)
+        //     })
     }
     fillDropdownValues(val) {
-        console.log(typeof (val))
-        if (typeof (val) === 'object') {
-            console.log(val)
-            // axios.get('/invo-api/fetch-field', {
-            //     params: {
-            //         collectionName: val[0],
-            //         fieldName: val[1]
-            //     }
-            // })
+        return new Promise((resolve, reject) => {
+            // if (typeof (val) === 'object') {
+            // axios.post('/invo-api/fetch-field', { collectionParam: val[0], fieldParam: val[1] })
             //     .then(resp => {
-            //         console.log(resp.data)
+            //         resolve(resp.data.map(obj => {
+            //             return <MenuItem value={obj[val[1]]}>{obj[val[1]]}</MenuItem>
+            //         }))
             //     })
-            //     .catch(e => {
-            //         console.log(e)
-            //     })
-            return 'hi'
-        }
-        else
-            return val.split(';').map(tempVal => {
-                return <MenuItem value={tempVal}>{tempVal}</MenuItem>
-            })
+            // .catch(e => {
+            //     reject(console.log(e))
+            // })
+            //     resolve(['a'])
+            // }
+            // else {
+            resolve(val.split(';').map(tempVal => {
+                return tempVal
+            }))
+            // }
+        })
     }
     generateDynamicForm() {
         let dt = new Date()
@@ -62,12 +62,31 @@ export default class Transactions extends React.Component {
                             type="date" defaultValue={today} InputLabelProps={{ shrink: true }} fullWidth />
                         break;
                     case DynamicForm.SelectField:
+                        let obj = this.state.dropdownValues
+                        obj[field.id] = []
+                        console.log(obj)
+                        this.setState({
+                            dropdownValues: obj
+                        })
+                        this.fillDropdownValues(field.dropdownValues)
+                            .then(res => {
+                                let obj = this.state.dropdownValues
+                                obj[field.id] = res
+                                this.setState({
+                                    dropdownValues: obj
+                                })
+                            }).catch(e => console.log(e))
                         rawObj = <FormControl variant="outlined" size="small" margin="dense" fullWidth>
                             <Select name={field.id} value={(field.defaultValue === undefined ? -1 : field.defaultValue)}
                             // onChange={handleChange}
                             >
                                 <MenuItem value="-1" disabled><em>{field.label}</em></MenuItem>
-                                {this.fillDropdownValues(field.dropdownValues)}
+                                {this.state.dropdownValues[field.id].map((itemVal) => {
+                                    return <MenuItem value={itemVal}>{itemVal}</MenuItem>
+                                })}
+                                {/* {this.state[field.id + "MenuItem"].map(itemVal => {
+                                    return <MenuItem value={itemVal}>{itemVal}</MenuItem>
+                                })} */}
                             </Select>
                         </FormControl>
                         break;
@@ -83,7 +102,9 @@ export default class Transactions extends React.Component {
                 }
                 return null
             })
-        return generatedForm
+        this.setState({
+            mybody: generatedForm
+        })
     }
     render() {
         return (
@@ -110,7 +131,7 @@ export default class Transactions extends React.Component {
                                     </ButtonGroup>
                                 </FormControl>
                             </Box>
-                            {this.generateDynamicForm()}
+                            {this.state.mybody}
                             <Box display="flex" justifyContent="center">
                                 <FormControl margin="dense">
                                     <Button type="submit" color="primary" variant="contained" startIcon={<Save />} disableElevation autoFocus>Save</Button>
