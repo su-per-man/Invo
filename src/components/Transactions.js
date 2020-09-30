@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button, ButtonGroup, Card, CardContent, TextField, FormControl, Select, Grid, MenuItem } from '@material-ui/core'
 import { Save } from '@material-ui/icons'
-import { Transactions_Form, DynamicForm } from '../SharedConstants'
+import { getDynamicForm, DynamicForm } from '../SharedConstants'
 import axios from 'axios'
 
 export default class Transactions extends React.Component {
@@ -9,39 +9,20 @@ export default class Transactions extends React.Component {
         super()
         this.state = {
             selectedMode: "Buy",
-            dropdownValues: {},
             mybody: null
         }
     }
     componentDidMount() {
-        this.generateDynamicForm()
+        getDynamicForm('Transactions_Form').then((resp) => {
+            this.Transactions_Form = resp
+            this.generateDynamicForm()
+        })
         // axios.get('/invo-api/transaction')
         //     .then(resp => {
         //     })
         //     .catch(e => {
         //         console.log(e)
         //     })
-    }
-    fillDropdownValues(val) {
-        return new Promise((resolve, reject) => {
-            // if (typeof (val) === 'object') {
-            // axios.post('/invo-api/fetch-field', { collectionParam: val[0], fieldParam: val[1] })
-            //     .then(resp => {
-            //         resolve(resp.data.map(obj => {
-            //             return <MenuItem value={obj[val[1]]}>{obj[val[1]]}</MenuItem>
-            //         }))
-            //     })
-            // .catch(e => {
-            //     reject(console.log(e))
-            // })
-            //     resolve(['a'])
-            // }
-            // else {
-            resolve(val.split(';').map(tempVal => {
-                return tempVal
-            }))
-            // }
-        })
     }
     generateDynamicForm() {
         let dt = new Date()
@@ -51,7 +32,7 @@ export default class Transactions extends React.Component {
         let breakPoint = 0
         let tempObj = []
         let generatedForm =
-            Transactions_Form.map(field => {
+            this.Transactions_Form.map(field => {
                 let rawObj = null
                 switch (field.objectType) {
                     case DynamicForm.TextField:
@@ -62,31 +43,14 @@ export default class Transactions extends React.Component {
                             type="date" defaultValue={today} InputLabelProps={{ shrink: true }} fullWidth />
                         break;
                     case DynamicForm.SelectField:
-                        let obj = this.state.dropdownValues
-                        obj[field.id] = []
-                        console.log(obj)
-                        this.setState({
-                            dropdownValues: obj
-                        })
-                        this.fillDropdownValues(field.dropdownValues)
-                            .then(res => {
-                                let obj = this.state.dropdownValues
-                                obj[field.id] = res
-                                this.setState({
-                                    dropdownValues: obj
-                                })
-                            }).catch(e => console.log(e))
                         rawObj = <FormControl variant="outlined" size="small" margin="dense" fullWidth>
                             <Select name={field.id} value={(field.defaultValue === undefined ? -1 : field.defaultValue)}
                             // onChange={handleChange}
                             >
                                 <MenuItem value="-1" disabled><em>{field.label}</em></MenuItem>
-                                {this.state.dropdownValues[field.id].map((itemVal) => {
+                                {field.dropdownValues.map((itemVal) => {
                                     return <MenuItem value={itemVal}>{itemVal}</MenuItem>
                                 })}
-                                {/* {this.state[field.id + "MenuItem"].map(itemVal => {
-                                    return <MenuItem value={itemVal}>{itemVal}</MenuItem>
-                                })} */}
                             </Select>
                         </FormControl>
                         break;
@@ -95,7 +59,7 @@ export default class Transactions extends React.Component {
                 }
                 tempObj.push(<Grid item xs={12} sm={4}> {rawObj} </Grid>)
                 breakPoint++
-                if (breakPoint % 3 === 0 || breakPoint === Transactions_Form.length) {
+                if (breakPoint % 3 === 0 || breakPoint === this.Transactions_Form.length) {
                     let temp = <Grid container spacing={3}>{tempObj}</Grid>
                     tempObj = []
                     return temp
