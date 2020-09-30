@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Button, ButtonGroup, Card, CardContent, TextField, FormControl, Select, Grid, MenuItem } from '@material-ui/core'
 import { Save } from '@material-ui/icons'
+import Skeleton from 'react-loading-skeleton'
 import { getDynamicForm, DynamicForm } from '../SharedConstants'
 import axios from 'axios'
 
@@ -95,7 +96,7 @@ export default class Transactions extends React.Component {
                                     </ButtonGroup>
                                 </FormControl>
                             </Box>
-                            {this.state.mybody}
+                            {this.state.mybody || <Skeleton count={5} height={50} />}
                             <Box display="flex" justifyContent="center">
                                 <FormControl margin="dense">
                                     <Button type="submit" color="primary" variant="contained" startIcon={<Save />} disableElevation autoFocus>Save</Button>
