@@ -1,7 +1,9 @@
 import React from 'react';
 import { Box, Button, ButtonGroup, Card, CardContent, TextField, FormControl, Select, Grid, MenuItem } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { Save } from '@material-ui/icons'
 import Skeleton from 'react-loading-skeleton'
+import { File } from 'react-kawaii'
 import { getDynamicForm, DynamicForm } from '../SharedConstants'
 import axios from 'axios'
 
@@ -17,6 +19,10 @@ export default class Transactions extends React.Component {
         getDynamicForm('Transactions_Form').then((resp) => {
             this.Transactions_Form = resp
             this.generateDynamicForm()
+        }).catch(e => {
+            this.setState({
+                mybody: 'Error'
+            })
         })
         // axios.get('/invo-api/transaction')
         //     .then(resp => {
@@ -77,32 +83,41 @@ export default class Transactions extends React.Component {
                 <h1>Transactions</h1 >
                 <Card>
                     <CardContent>
-                        <form onSubmit={(e) => {
-                            e.preventDefault()
-                            let fd = new FormData(e.target)
-                            let obj = {}
-                            fd.forEach((value, key) => { obj[key] = value });
-                            console.log(obj)
-                            axios.post("invo-api/create-transaction", obj).then(resp => console.log(resp.data))
-                                .catch(e => console.log(e))
-                        }}>
-                            <Box display="flex" justifyContent="center">
-                                <FormControl margin="dense">
-                                    <ButtonGroup disableElevation color="primary">
-                                        <Button variant={this.state.selectedMode === "Buy" ? "contained" : ""}
-                                            onClick={() => this.setState({ selectedMode: "Buy" })}>Buy</Button>
-                                        <Button variant={this.state.selectedMode === "Sell" ? "contained" : ""}
-                                            onClick={() => this.setState({ selectedMode: "Sell" })}>Sell</Button>
-                                    </ButtonGroup>
-                                </FormControl>
-                            </Box>
-                            {this.state.mybody || <Skeleton count={5} height={50} />}
-                            <Box display="flex" justifyContent="center">
-                                <FormControl margin="dense">
-                                    <Button type="submit" color="primary" variant="contained" startIcon={<Save />} disableElevation autoFocus>Save</Button>
-                                </FormControl>
-                            </Box>
-                        </form>
+                        {this.state.mybody === null ? <Skeleton count={5} height={50} />
+                            : this.state.mybody === 'Error' ?
+                                <Box>
+                                    <Box justifyContent="center" display="flex">
+                                        <File size={200} mood="sad" color="#83D1FB" />
+                                    </Box>
+                                    <Alert severity="error" variant="outlined">Internal Server Down</Alert>
+                                </Box>
+                                : <form onSubmit={(e) => {
+                                    e.preventDefault()
+                                    let fd = new FormData(e.target)
+                                    let obj = {}
+                                    fd.forEach((value, key) => { obj[key] = value });
+                                    console.log(obj)
+                                    axios.post("invo-api/create-transaction", obj).then(resp => console.log(resp.data))
+                                        .catch(e => console.log(e))
+                                }}>
+                                    <Box display="flex" justifyContent="center">
+                                        <FormControl margin="dense">
+                                            <ButtonGroup disableElevation color="primary">
+                                                <Button variant={this.state.selectedMode === "Buy" ? "contained" : ""}
+                                                    onClick={() => this.setState({ selectedMode: "Buy" })}>Buy</Button>
+                                                <Button variant={this.state.selectedMode === "Sell" ? "contained" : ""}
+                                                    onClick={() => this.setState({ selectedMode: "Sell" })}>Sell</Button>
+                                            </ButtonGroup>
+                                        </FormControl>
+                                    </Box>
+                                    {this.state.mybody}
+                                    <Box display="flex" justifyContent="center">
+                                        <FormControl margin="dense">
+                                            <Button type="submit" color="primary" variant="contained" startIcon={<Save />} disableElevation autoFocus>Save</Button>
+                                        </FormControl>
+                                    </Box>
+                                </form>
+                        }
                     </CardContent>
                 </Card>
             </React.Fragment >

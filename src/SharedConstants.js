@@ -55,13 +55,14 @@ export const getDynamicForm = (formName) => {
         result.map((field, i) => {
             switch (field.objectType) {
                 case DynamicForm.SelectField:
-                    if (typeof (field.dropdownValues) === 'object')
+                    if (typeof (field.dropdownValues) === 'object') {
                         allPromiseList.push(
                             fillDropdownValues(field.dropdownValues)
                                 .then(res => {
                                     result[i].dropdownValues = res
                                 })
-                                .catch(e => console.log(e)))
+                                .catch(e => reject(e)))
+                    }
                     else {
                         result[i].dropdownValues = field.dropdownValues.split(';').map(f => f)
                     }
@@ -83,6 +84,6 @@ const fillDropdownValues = (dopDownValObj) => {
                 temp = resp.data.map(obj => obj[dopDownValObj[1]])
                 resolve(temp)
             })
-            .catch(e => reject(console.log(e)))
+            .catch(e => reject(e))
     })
 }
