@@ -41,7 +41,8 @@ export const TransactionsForm = [
     { id: 'Item', label: 'Item', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['item', 'Name'] },
 ];
 
-export const getDynamicForm = (inputForm) => {
+export const getDynamicForm = (frmObj) => {
+    let inputForm = JSON.parse(JSON.stringify(frmObj))  //Clone object without reference
     return new Promise((resolve, reject) => {
         const allPromiseList = []
         inputForm.map((field, i) => {
@@ -56,7 +57,7 @@ export const getDynamicForm = (inputForm) => {
                                 .catch(e => reject(e)))
                     }
                     else {
-                        inputForm[i].dropdownValues = field.dropdownValues.split(';').map((f, x )=> f)
+                        inputForm[i].dropdownValues = field.dropdownValues.split(';').map((f, x) => f)
                     }
                     break;
                 default:
@@ -68,12 +69,12 @@ export const getDynamicForm = (inputForm) => {
     })
 }
 
-const fillDropdownValues = (dopDownValObj) => {
+const fillDropdownValues = (dropDownValObj) => {
     return new Promise((resolve, reject) => {
-        axios.post('/invo-api/fetch-field', { collectionParam: dopDownValObj[0], fieldParam: dopDownValObj[1] })
+        axios.post('/invo-api/fetch-field', { collectionParam: dropDownValObj[0], fieldParam: dropDownValObj[1] })
             .then(resp => {
                 let temp = {}
-                temp = resp.data.map(obj => obj[dopDownValObj[1]])
+                temp = resp.data.map(obj => obj[dropDownValObj[1]])
                 resolve(temp)
             })
             .catch(e => reject(e))
