@@ -31,7 +31,7 @@ export const Configure_Contact = [
     { id: 'Phone', label: 'Phone', objectType: DynamicForm.TextField }
 ];
 
-const Transactions_Form = [
+export const TransactionsForm = [
     { id: 'TransactionDate', label: 'Transaction Date', objectType: DynamicForm.DateField, required: true },
     { id: 'Warehouse', label: 'Warehouse', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['warehouse', 'Name'] }, //{ Name: 1, _id: 0 }
     { id: 'Contact', label: 'Buyer/Seller', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['contact', 'FirstName'] },
@@ -41,30 +41,22 @@ const Transactions_Form = [
     { id: 'Item', label: 'Item', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['item', 'Name'] },
 ];
 
-export const getDynamicForm = (formName) => {
+export const getDynamicForm = (inputForm) => {
     return new Promise((resolve, reject) => {
-        let result
         const allPromiseList = []
-        switch (formName) {
-            case 'Transactions_Form':
-                result = Transactions_Form
-                break;
-            default:
-                console.log(formName + ' doesn\'t exists')
-        }
-        result.map((field, i) => {
+        inputForm.map((field, i) => {
             switch (field.objectType) {
                 case DynamicForm.SelectField:
                     if (typeof (field.dropdownValues) === 'object') {
                         allPromiseList.push(
                             fillDropdownValues(field.dropdownValues)
                                 .then(res => {
-                                    result[i].dropdownValues = res
+                                    inputForm[i].dropdownValues = res
                                 })
                                 .catch(e => reject(e)))
                     }
                     else {
-                        result[i].dropdownValues = field.dropdownValues.split(';').map(f => f)
+                        inputForm[i].dropdownValues = field.dropdownValues.split(';').map((f, x )=> f)
                     }
                     break;
                 default:
@@ -72,7 +64,7 @@ export const getDynamicForm = (formName) => {
             }
             return 1
         })
-        Promise.all(allPromiseList).then(() => resolve(result))
+        Promise.all(allPromiseList).then(() => resolve(inputForm))
     })
 }
 

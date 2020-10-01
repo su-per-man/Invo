@@ -4,7 +4,7 @@ import { Alert } from '@material-ui/lab'
 import { Save } from '@material-ui/icons'
 import Skeleton from 'react-loading-skeleton'
 import { File } from 'react-kawaii'
-import { getDynamicForm, DynamicForm } from '../SharedConstants'
+import { getDynamicForm, DynamicForm, TransactionsForm } from '../SharedConstants'
 import axios from 'axios'
 
 export default class Transactions extends React.Component {
@@ -16,8 +16,8 @@ export default class Transactions extends React.Component {
         }
     }
     componentDidMount() {
-        getDynamicForm('Transactions_Form').then((resp) => {
-            this.Transactions_Form = resp
+        getDynamicForm(TransactionsForm).then((resp) => {
+            this.fetchedForm = resp
             this.generateDynamicForm()
         }).catch(e => {
             this.setState({
@@ -34,12 +34,13 @@ export default class Transactions extends React.Component {
     generateDynamicForm() {
         let dt = new Date()
         let month = dt.getMonth() + 1
-        let today = dt.getFullYear() + "-" + (month < 10 ? 0 : '') + month + "-" + dt.getDate()
+        let day = dt.getDate()
+        let today = dt.getFullYear() + "-" + (month < 10 ? 0 : '') + month + "-" + (day < 10 ? 0 : '') + day
 
         let breakPoint = 0
         let tempObj = []
         let generatedForm =
-            this.Transactions_Form.map(field => {
+            this.fetchedForm.map(field => {
                 let rawObj = null
                 switch (field.objectType) {
                     case DynamicForm.TextField:
@@ -56,7 +57,7 @@ export default class Transactions extends React.Component {
                             >
                                 <MenuItem value="-1" disabled><em>{field.label}</em></MenuItem>
                                 {field.dropdownValues.map((itemVal) => {
-                                    return <MenuItem value={itemVal}>{itemVal}</MenuItem>
+                                    return <MenuItem key={itemVal} value={itemVal}>{itemVal}</MenuItem>
                                 })}
                             </Select>
                         </FormControl>
@@ -66,7 +67,7 @@ export default class Transactions extends React.Component {
                 }
                 tempObj.push(<Grid item xs={12} sm={4}> {rawObj} </Grid>)
                 breakPoint++
-                if (breakPoint % 3 === 0 || breakPoint === this.Transactions_Form.length) {
+                if (breakPoint % 3 === 0 || breakPoint === this.fetchedForm.length) {
                     let temp = <Grid container spacing={3}>{tempObj}</Grid>
                     tempObj = []
                     return temp
