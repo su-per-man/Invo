@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { getDynamicForm, TransactionsForm } from '../SharedConstants'
 import CRUDTable from './CRUDTable'
 import axios from 'axios'
@@ -54,17 +54,15 @@ export default class Transactions extends React.Component {
         return (
             <React.Fragment>
                 <h1>Transactions</h1 >
-                <Card>
-                    <CardContent>
-                        {this.state.rows && this.state.columns
-                            ?
-                            <CRUDTable rows={this.state.rows} columns={this.state.columns}
-                                onCreate={this.handleCreateDoc} onUpdate={this.handleUpdateDoc} onDelete={this.handleDeleteDoc} />
-                            :
-                            <Skeleton count={5} height={50} />
-                        }
-                    </CardContent>
-                </Card>
+                <Box>
+                    {this.state.rows && this.state.columns
+                        ?
+                        <CRUDTable rows={this.state.rows} columns={this.state.columns}
+                            onCreate={this.handleCreateDoc} onUpdate={this.handleUpdateDoc} onDelete={this.handleDeleteDoc} />
+                        :
+                        <Skeleton count={5} height={50} />
+                    }
+                </Box>
             </React.Fragment >
         );
     }

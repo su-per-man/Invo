@@ -1,8 +1,15 @@
 import React from 'react';
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Grid, FormControl, Select, MenuItem }
-    from '@material-ui/core';
+import {
+    Button, TextField, Dialog, Box, DialogTitle, Grid, FormControl, Select, MenuItem,
+    AppBar, Toolbar, IconButton, Container, Slide
+} from '@material-ui/core';
+import { Close } from '@material-ui/icons'
 import Skeleton from 'react-loading-skeleton'
 import { DynamicForm, CRUDModes } from '../SharedConstants'
+
+const DialogTransition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default class FormDialog extends React.Component {
     constructor(props) {
@@ -90,19 +97,23 @@ export default class FormDialog extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Dialog open={this.props.trigger} onClose={this.props.onDismiss}>
-                    <DialogTitle>{this.props.mode}</DialogTitle>
-                    <DialogContent>
+                <Dialog fullScreen open={this.props.trigger} onClose={this.props.onDismiss} TransitionComponent={DialogTransition}>
+                    <AppBar elevation={0} position="sticky">
+                        <Toolbar>
+                            <IconButton edge="start" color="inherit" onClick={this.props.onDismiss}>
+                                <Close />
+                            </IconButton>
+                            <DialogTitle>{this.props.mode}</DialogTitle>
+                        </Toolbar>
+                    </AppBar>
+                    <Container>
                         <form onSubmit={this.handleSubmit.bind(this)}>
-                            {
-                                this.state.formBody || <Skeleton count={5} height={50} />
-                            }
-                            <DialogActions>
-                                <Button onClick={this.props.onDismiss} color="primary">Discard</Button>
-                                <Button type="submit" color="primary" variant="contained" disableElevation autoFocus>Save</Button>
-                            </DialogActions>
+                            <Box my={3} >
+                                {this.state.formBody || <Skeleton count={5} height={50} />}
+                            </Box>
+                            <Button type="submit" color="primary" variant="contained" fullWidth disableElevation>Save</Button>
                         </form>
-                    </DialogContent>
+                    </Container>
                 </Dialog>
             </React.Fragment >
         );
