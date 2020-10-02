@@ -156,7 +156,7 @@ export default class StickyHeadTable extends React.Component {
                           </IconButton>
                         </Tooltip>
                         <Tooltip title={CRUDModes.Delete}>
-                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Delete, id: row._id, name: row[Object.keys(row)[1]] })}>
+                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Delete, id: row._id, name: (row._id).slice(-4) })}>
                             <Delete fontSize="small" />
                           </IconButton>
                         </Tooltip>
