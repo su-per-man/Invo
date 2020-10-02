@@ -1,17 +1,17 @@
 import React from 'react';
-import { Box, Button, ButtonGroup, Card, CardContent, FormControl } from '@material-ui/core'
+import { Card, CardContent } from '@material-ui/core'
 import { getDynamicForm, TransactionsForm } from '../SharedConstants'
 import CRUDTable from './CRUDTable'
 import axios from 'axios'
+import Skeleton from 'react-loading-skeleton';
 
 export default class Transactions extends React.Component {
     constructor() {
         super()
         this.state = {
-            selectedMode: "Buy",
             mybody: null,
-            rows: [],
-            columns: []
+            rows: null,
+            columns: null
         }
     }
     componentDidMount() {
@@ -56,26 +56,13 @@ export default class Transactions extends React.Component {
                 <h1>Transactions</h1 >
                 <Card>
                     <CardContent>
-                        {<form>
-                            <Box display="flex" justifyContent="center">
-                                <FormControl margin="dense">
-                                    <ButtonGroup disableElevation color="primary">
-                                        <Button variant={this.state.selectedMode === "Buy" ? "contained" : ""}
-                                            onClick={() => this.setState({ selectedMode: "Buy" })}>Buy</Button>
-                                        <Button variant={this.state.selectedMode === "Sell" ? "contained" : ""}
-                                            onClick={() => this.setState({ selectedMode: "Sell" })}>Sell</Button>
-                                    </ButtonGroup>
-                                </FormControl>
-                            </Box>
-                            {this.state.mybody}
-                        </form>
+                        {this.state.rows && this.state.columns
+                            ?
+                            <CRUDTable rows={this.state.rows} columns={this.state.columns}
+                                onCreate={this.handleCreateDoc} onUpdate={this.handleUpdateDoc} onDelete={this.handleDeleteDoc} />
+                            :
+                            <Skeleton count={5} height={50} />
                         }
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardContent>
-                        <CRUDTable rows={this.state.rows} columns={this.state.columns}
-                            onCreate={this.handleCreateDoc} onUpdate={this.handleUpdateDoc} onDelete={this.handleDeleteDoc} />
                     </CardContent>
                 </Card>
             </React.Fragment >

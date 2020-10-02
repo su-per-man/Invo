@@ -6,7 +6,7 @@ import {
 import { Add, Edit, Delete } from '@material-ui/icons'
 import { Alert } from '@material-ui/lab'
 import FormDialog from './FormDialog'
-import { CRUDModes } from '../SharedConstants'
+import { CRUDModes, DynamicForm } from '../SharedConstants'
 import { File } from 'react-kawaii'
 
 export default class StickyHeadTable extends React.Component {
@@ -162,11 +162,13 @@ export default class StickyHeadTable extends React.Component {
                         </Tooltip>
                       </TableCell>
                       {this.props.columns.map((column) => {
-                        return (
-                          <TableCell>
-                            {row[column.id]}
-                          </TableCell>
-                        );
+                        let cellVal = row[column.id]
+                        if (column.objectType === DynamicForm.DateField) {
+                          cellVal = new Date(row[column.id]).toLocaleDateString('en-GB', {
+                            year: 'numeric', month: 'short', day: 'numeric'
+                          })
+                        }
+                        return <TableCell>{cellVal}</TableCell>;
                       })}
                     </TableRow>
                   );

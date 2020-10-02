@@ -32,7 +32,8 @@ export const Configure_Contact = [
 ];
 
 export const TransactionsForm = [
-    { id: 'TransactionDate', label: 'Transaction Date', objectType: DynamicForm.DateField, required: true },
+    { id: 'TransactionDate', label: 'Date', objectType: DynamicForm.DateField, required: true },
+    { id: 'TransactionType', label: 'Type', objectType: DynamicForm.SelectField, required: true, dropdownValues: 'Buy;Sell' },
     { id: 'Warehouse', label: 'Warehouse', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['warehouse', 'Name'] }, //{ Name: 1, _id: 0 }
     { id: 'Contact', label: 'Buyer/Seller', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['contact', 'FirstName'] },
     { id: 'TotalUnits', label: 'Total Units', objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.NumberType },
