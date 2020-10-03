@@ -1,14 +1,14 @@
 const mongoose = require('mongoose')
 
-let ContactSchema = new mongoose.Schema({
-    FirstName: {
+let VendorSchema = new mongoose.Schema({
+    Vendor: {
         type: String,
         required: true,
+        unique:true
     },
-    LastName: String,
-    Company: {
+    Responsible: {
         type: String,
-        required: true
+        required: true,
     },
     Location: {
         type: String,
@@ -17,9 +17,9 @@ let ContactSchema = new mongoose.Schema({
     Phone: String,
 }, { timestamps: true })
 
-ContactSchema.index({
-    FirstName: 1,
-    Company: 1,
+VendorSchema.index({
+    Vendor: 1,
+    Responsible: 1,
     Location: 1
 }, { unique: true })
-module.exports = mongoose.model('contacts', ContactSchema)
+module.exports = mongoose.model('vendors', VendorSchema)

@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 let TransactionSchema = mongoose.Schema({
     TransactionDate: Date,
     Warehouse: String,
-    Contact: String,
+    Vendor: String,
     TotalUnits: Number,
     Unit: String,
     CostPerUnit: Number,

@@ -5,7 +5,7 @@ import { Alert } from '@material-ui/lab'
 import axios from 'axios'
 import Skeleton from 'react-loading-skeleton'
 import { File } from 'react-kawaii'
-import { Configure_Warehouse, Configure_Item, Configure_Contact } from '../SharedConstants'
+import { Configure_Warehouse, Configure_Item, Configure_Vendor } from '../SharedConstants'
 
 export default class Configure extends React.Component {
     constructor(props) {
@@ -13,7 +13,7 @@ export default class Configure extends React.Component {
         this._configurableTabs = [
             { label: "warehouses", value: "warehouse", columns: Configure_Warehouse },
             { label: "items", value: "item", columns: Configure_Item },
-            { label: "contacts", value: "contact", columns: Configure_Contact }
+            { label: "vendor", value: "vendor", columns: Configure_Vendor }
         ]
         this.state = {
             selectedTab: this._configurableTabs[0].value,
