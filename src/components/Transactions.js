@@ -2,6 +2,8 @@ import React from 'react';
 import { Box } from '@material-ui/core'
 import { getDynamicForm, TransactionsForm } from '../SharedConstants'
 import CRUDTable from './CRUDTable'
+import { Alert } from '@material-ui/lab'
+import { File } from 'react-kawaii'
 import axios from 'axios'
 import Skeleton from 'react-loading-skeleton';
 
@@ -25,9 +27,7 @@ export default class Transactions extends React.Component {
         }))
         promisesList.push(axios.get('/invo-api/transaction')
             .then(resp => this.fetchedRows = resp.data)
-            .catch(e => {
-                console.log(e)
-            }))
+            .catch(this.handleError))
         Promise.all(promisesList).then(() => {
             this.setState({
                 columns: this.fetchedForm || [],
@@ -50,15 +50,33 @@ export default class Transactions extends React.Component {
             this.setState({ rows: resp.data })
         }).catch(this.handleError)
     }
+    handleError = (e) => {
+    }
+
     render() {
         return (
             <React.Fragment>
                 <h1>Transactions</h1 >
                 <Box>
+                    {/* <TextField name={field.id} label='' type="date"
+                        defaultValue='01-10-2020' InputLabelProps={{ shrink: true }}
+                        variant="outlined" margin="dense" autoComplete="off" fullWidth /> */}
+                </Box>
+                <Box>
                     {this.state.rows && this.state.columns
                         ?
-                        <CRUDTable rows={this.state.rows} columns={this.state.columns}
-                            onCreate={this.handleCreateDoc} onUpdate={this.handleUpdateDoc} onDelete={this.handleDeleteDoc} />
+                        (this.state.columns.length !== 0
+                            ?
+                            <CRUDTable rows={this.state.rows} columns={this.state.columns}
+                                onCreate={this.handleCreateDoc} onUpdate={this.handleUpdateDoc} onDelete={this.handleDeleteDoc} />
+                            :
+                            <Box p={3}>
+                                <Box justifyContent="center" display="flex">
+                                    <File size={200} mood="sad" color="#83D1FB" />
+                                </Box>
+                                <Alert severity="error" variant="outlined">Internal Server Down</Alert>
+                            </Box>
+                        )
                         :
                         <Skeleton count={5} height={50} />
                     }
