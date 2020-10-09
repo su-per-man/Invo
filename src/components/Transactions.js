@@ -58,9 +58,12 @@ export default class Transactions extends React.Component {
             <React.Fragment>
                 <h1>Transactions</h1 >
                 <Box>
-                    {/* <TextField name={field.id} label='' type="date"
-                        defaultValue='01-10-2020' InputLabelProps={{ shrink: true }}
-                        variant="outlined" margin="dense" autoComplete="off" fullWidth /> */}
+                    <AppBar position="static" color="default">
+                        <Tabs value={this.state.selectedTab} onChange={this.handleChange} indicatorColor="primary" textColor="primary" variant="fullWidth">
+                            <Tab label='08/10/2020' value='08/10/2020' />
+                            <Tab label='Today' value='Today' />;
+                        </Tabs>
+                    </AppBar>
                 </Box>
                 <Box>
                     {this.state.rows && this.state.columns
