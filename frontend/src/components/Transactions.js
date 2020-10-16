@@ -61,7 +61,7 @@ export default class Transactions extends React.Component {
                     <AppBar position="static" color="default">
                         <Tabs value={this.state.selectedTab} onChange={this.handleChange} indicatorColor="primary" textColor="primary" variant="fullWidth">
                             <Tab label='Item Flow' value='Item Flow' />
-                            <Tab label='Cash Flow' value='Cash Flow' />;
+                            <Tab label='Cash Flow' value='Cash Flow' />
                         </Tabs>
                     </AppBar>
                 </Box>
