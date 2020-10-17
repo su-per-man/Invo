@@ -1,11 +1,14 @@
 import React from 'react';
-import { Box, AppBar, Tabs, Tab } from '@material-ui/core'
+import { Box, AppBar, Tabs, Tab, Card, CardHeader, CardActionArea, Divider, Avatar, Typography, List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core'
 import { getDynamicForm, TransactionsForm } from '../SharedConstants'
 import CRUDTable from './CRUDTable'
 import { Alert } from '@material-ui/lab'
 import { File } from 'react-kawaii'
 import axios from 'axios'
 import Skeleton from 'react-loading-skeleton';
+import { green, red } from '@material-ui/core/colors';
+import { CallMade, CallReceived } from '@material-ui/icons';
+
 
 export default class Transactions extends React.Component {
     constructor() {
@@ -13,7 +16,8 @@ export default class Transactions extends React.Component {
         this.state = {
             mybody: null,
             rows: null,
-            columns: null
+            columns: null,
+            selectedTab: 'ItemFlow'
         }
     }
     componentDidMount() {
@@ -52,21 +56,27 @@ export default class Transactions extends React.Component {
     }
     handleError = (e) => {
     }
+    handleChange = (e, newVal) => {
+        this.setState({ selectedTab: newVal })
+    }
+    generateColor() {
+        return '#' + Math.random().toString(16).substr(-6);
+    }
 
     render() {
         return (
             <React.Fragment>
                 <h1>Transactions</h1 >
-                <Box>
+                <Box mb={3}>
                     <AppBar position="static" color="default">
                         <Tabs value={this.state.selectedTab} onChange={this.handleChange} indicatorColor="primary" textColor="primary" variant="fullWidth">
-                            <Tab label='Item Flow' value='Item Flow' />
-                            <Tab label='Cash Flow' value='Cash Flow' />
+                            <Tab label='Item Flow' value='ItemFlow' />
+                            <Tab label='Cash Flow' value='CashFlow' />
                         </Tabs>
                     </AppBar>
                 </Box>
                 <Box>
-                    {this.state.rows && this.state.columns
+                    {/* {this.state.rows && this.state.columns
                         ?
                         (this.state.columns.length !== 0
                             ?
@@ -82,7 +92,22 @@ export default class Transactions extends React.Component {
                         )
                         :
                         <Skeleton count={5} height={50} />
-                    }
+                    } */}
+                    <List>
+                        <ListItem alignItems="flex-start">
+                            <ListItemAvatar>
+                                <Avatar style={{ backgroundColor: green[500] }}> <CallReceived /> </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary="Suman Kumar" secondary="September 14, 2016" />
+                        </ListItem>
+                        <Divider variant="inset" component="li" />
+                        <ListItem alignItems="flex-start">
+                            <ListItemAvatar>
+                                <Avatar style={{ backgroundColor: red[500] }}> <CallMade /> </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary="Suman Kumar" secondary="September 14, 2016" />
+                        </ListItem>
+                    </List>
                 </Box>
             </React.Fragment >
         );
