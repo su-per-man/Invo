@@ -76,38 +76,47 @@ export default class Transactions extends React.Component {
                     </AppBar>
                 </Box>
                 <Box>
-                    {/* {this.state.rows && this.state.columns
-                        ?
-                        (this.state.columns.length !== 0
-                            ?
-                            <CRUDTable rows={this.state.rows} columns={this.state.columns}
-                                onCreate={this.handleCreateDoc} onUpdate={this.handleUpdateDoc} onDelete={this.handleDeleteDoc} />
-                            :
-                            <Box p={3}>
-                                <Box justifyContent="center" display="flex">
-                                    <File size={200} mood="sad" color="#83D1FB" />
+                    {
+                        (
+                            this.state.selectedTab === 'ItemFlow' && this.state.rows && this.state.columns &&
+                            (
+                                (
+                                    this.state.columns.length !== 0 &&
+                                    <CRUDTable rows={this.state.rows} columns={this.state.columns}
+                                        onCreate={this.handleCreateDoc} onUpdate={this.handleUpdateDoc} onDelete={this.handleDeleteDoc} />
+                                )
+                                ||
+                                <Box p={3}>
+                                    <Box justifyContent="center" display="flex">
+                                        <File size={200} mood="sad" color="#83D1FB" />
+                                    </Box>
+                                    <Alert severity="error" variant="outlined">Internal Server Down</Alert>
                                 </Box>
-                                <Alert severity="error" variant="outlined">Internal Server Down</Alert>
-                            </Box>
+                            )
+                            ||
+                            this.state.selectedTab === 'CashFlow' &&
+                            (
+                                <List>
+                                    <ListItem alignItems="flex-start">
+                                        <ListItemAvatar>
+                                            <Avatar style={{ backgroundColor: green[500] }}> <CallReceived /> </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText primary="Suman Kumar" secondary="September 14, 2016" />
+                                    </ListItem>
+                                    <Divider variant="inset" component="li" />
+                                    <ListItem alignItems="flex-start">
+                                        <ListItemAvatar>
+                                            <Avatar style={{ backgroundColor: red[500] }}> <CallMade /> </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText primary="Suman Kumar" secondary="September 14, 2016" />
+                                    </ListItem>
+                                </List>
+                            )
+
                         )
-                        :
+                        ||
                         <Skeleton count={5} height={50} />
-                    } */}
-                    <List>
-                        <ListItem alignItems="flex-start">
-                            <ListItemAvatar>
-                                <Avatar style={{ backgroundColor: green[500] }}> <CallReceived /> </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText primary="Suman Kumar" secondary="September 14, 2016" />
-                        </ListItem>
-                        <Divider variant="inset" component="li" />
-                        <ListItem alignItems="flex-start">
-                            <ListItemAvatar>
-                                <Avatar style={{ backgroundColor: red[500] }}> <CallMade /> </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText primary="Suman Kumar" secondary="September 14, 2016" />
-                        </ListItem>
-                    </List>
+                    }
                 </Box>
             </React.Fragment >
         );
