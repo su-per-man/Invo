@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, AppBar, Tabs, Tab, Card, CardHeader, CardActionArea, Divider, Avatar, Typography, List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core'
+import { Box, AppBar, Tabs, Tab, Divider, Avatar, Typography, List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core'
 import { getDynamicForm, TransactionsForm } from '../SharedConstants'
 import CRUDTable from './CRUDTable'
 import { Alert } from '@material-ui/lab'
@@ -77,45 +77,45 @@ export default class Transactions extends React.Component {
                 </Box>
                 <Box>
                     {
-                        (
-                            this.state.selectedTab === 'ItemFlow' && this.state.rows && this.state.columns &&
-                            (
-                                (
-                                    this.state.columns.length !== 0 &&
-                                    <CRUDTable rows={this.state.rows} columns={this.state.columns}
-                                        onCreate={this.handleCreateDoc} onUpdate={this.handleUpdateDoc} onDelete={this.handleDeleteDoc} />
-                                )
-                                ||
-                                <Box p={3}>
-                                    <Box justifyContent="center" display="flex">
-                                        <File size={200} mood="sad" color="#83D1FB" />
-                                    </Box>
-                                    <Alert severity="error" variant="outlined">Internal Server Down</Alert>
-                                </Box>
-                            )
-                            ||
-                            this.state.selectedTab === 'CashFlow' &&
-                            (
-                                <List>
-                                    <ListItem alignItems="flex-start">
-                                        <ListItemAvatar>
-                                            <Avatar style={{ backgroundColor: green[500] }}> <CallReceived /> </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText primary="Suman Kumar" secondary="September 14, 2016" />
-                                    </ListItem>
-                                    <Divider variant="inset" component="li" />
-                                    <ListItem alignItems="flex-start">
-                                        <ListItemAvatar>
-                                            <Avatar style={{ backgroundColor: red[500] }}> <CallMade /> </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText primary="Suman Kumar" secondary="September 14, 2016" />
-                                    </ListItem>
-                                </List>
-                            )
-
-                        )
-                        ||
-                        <Skeleton count={5} height={50} />
+                        () => {
+                            switch (this.state.selectedTab) {
+                                case 'ItemFlow':
+                                    if (this.state.rows && this.state.columns) {
+                                        if (this.state.columns.length !== 0)
+                                            return <CRUDTable rows={this.state.rows} columns={this.state.columns}
+                                                onCreate={this.handleCreateDoc} onUpdate={this.handleUpdateDoc} onDelete={this.handleDeleteDoc} />
+                                        else
+                                            return <Box p={3}>
+                                                <Box justifyContent="center" display="flex">
+                                                    <File size={200} mood="sad" color="#83D1FB" />
+                                                </Box>
+                                                <Alert severity="error" variant="outlined">Internal Server Down</Alert>
+                                            </Box>
+                                    }
+                                    return <Skeleton count={5} height={50} />
+                                case 'CashFlow':
+                                    return <List>
+                                        <ListItem alignItems="flex-start">
+                                            <ListItemAvatar>
+                                                <Avatar style={{ backgroundColor: green[500] }}> <CallReceived /> </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText primary="Suman Kumar" secondary="September 14, 2016" />
+                                            <Box alignItems="right">
+                                                <Typography variant="h6" color="red">₹ {500}</Typography>
+                                            </Box>
+                                        </ListItem>
+                                        <Divider variant="inset" component="li" />
+                                        <ListItem alignItems="flex-start">
+                                            <ListItemAvatar>
+                                                <Avatar style={{ backgroundColor: red[500] }}> <CallMade /> </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText primary="Suman Kumar" secondary="September 14, 2016" />
+                                        </ListItem>
+                                    </List>
+                                default:
+                                    return null
+                            }
+                        }
                     }
                 </Box>
             </React.Fragment >
