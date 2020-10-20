@@ -5,7 +5,8 @@ schemas = {
     warehouse: require('../models/Warehouse'),
     item: require('../models/Item'),
     vendor: require('../models/Vendor'),
-    transaction: require('../models/Transaction')
+    transaction: require('../models/Transaction'),
+    othertransaction: require('../models/OtherTransaction')
 }
 
 for (const sch in schemas) {
