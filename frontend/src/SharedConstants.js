@@ -41,6 +41,14 @@ export const TransactionsForm = [
     { id: 'Item', label: 'Item', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['item', 'Name'] },
 ];
 
+export const OtherTransactionsForm = [
+    { id: 'TransactionDate', label: 'Date', objectType: DynamicForm.DateField, required: true },
+    { id: 'TransactionType', label: 'Type', objectType: DynamicForm.SelectField, required: true, dropdownValues: 'Income;Expenditure' },
+    { id: 'Vendor', label: 'Vendor', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['vendor', 'Vendor'] },
+    { id: 'Amount', label: 'Amount', objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.NumberType },
+    { id: 'Notes', label: 'Notes', objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.TextField },
+];
+
 export const getDynamicForm = (frmObj) => {
     let inputForm = JSON.parse(JSON.stringify(frmObj))  //Clone object without reference
     return new Promise((resolve, reject) => {
