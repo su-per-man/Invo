@@ -1,7 +1,7 @@
 import React from 'react';
-import { List, ListItem, ListItemAvatar, ListItemText, Grid, Box, Divider, Avatar, Typography, Card, CardActionArea, Collapse, Button } from "@material-ui/core"
+import { List, ListItem, ListItemAvatar, ListItemText, Grid, Box, Avatar, Typography, Card, CardActionArea, Collapse } from "@material-ui/core"
 import { green, red } from '@material-ui/core/colors'
-import { CallMade, CallReceived, Comment, Extension, LocalOffer, ShoppingCart, Store } from '@material-ui/icons'
+import { CallMade, CallReceived, Extension, LocalOffer, ShoppingCart, Store } from '@material-ui/icons'
 
 export default class Dashboard extends React.Component {
     constructor() {
@@ -18,7 +18,7 @@ export default class Dashboard extends React.Component {
             <React.Fragment>
                 <h1>Dashboard</h1 >
                 <List>
-                    <Card elevation={0}>
+                    <Card>
                         <CardActionArea onClick={this.handleClick}>
                             <ListItem alignItems="flex-start">
                                 <ListItemAvatar>
@@ -37,26 +37,39 @@ export default class Dashboard extends React.Component {
                                 <ListItem>
                                     <Grid container spacing={2}>
                                         <Grid item sm>
-                                            <Button aria-label="Warehouse" startIcon={<Store />}>WAREHOUSE</Button>
+                                            <Grid container direction="row" alignItems="center" spacing={2} aria-label="Warehouse">
+                                                <Grid item><Store /></Grid>
+                                                <Grid item>
+                                                    <Typography variant="subtitle2">Hey</Typography>
+                                                </Grid>
+                                            </Grid>
                                         </Grid>
                                         <Grid item sm>
-                                            <Button aria-label="Cost/Unit" startIcon={<LocalOffer />}>Cost/Unit</Button>
+                                            <Grid container direction="row" alignItems="center" spacing={2} aria-label="Cost/Unit">
+                                                <Grid item><LocalOffer /></Grid>
+                                                <Typography variant="subtitle2">Hey</Typography>
+                                            </Grid>
                                         </Grid>
                                         <Grid item sm>
-                                            <Button aria-label="Total Units" startIcon={<ShoppingCart />}>Total Unit</Button>
+                                            <Grid container direction="row" alignItems="center" spacing={2} aria-label="Total Units">
+                                                <Grid item><ShoppingCart /></Grid>
+                                                <Typography variant="subtitle2">Hey</Typography>
+                                            </Grid>
                                         </Grid>
                                         <Grid item sm>
-                                            <Button aria-label="Item" startIcon={<Extension />}>Item</Button>
+                                            <Grid container direction="row" alignItems="center" spacing={2} aria-label="Item">
+                                                <Grid item><Extension /></Grid>
+                                                <Typography variant="subtitle2">Hey</Typography>
+                                            </Grid>
                                         </Grid>
-                                        <Grid item sm>
-                                            Hey there!!Hey there!!Hey there!!Hey there!!Hey there!!
+                                        <Grid item sm={12}>
+                                            <ListItemText secondary="Hey there! Hey there! Hey there!" />
                                         </Grid>
                                     </Grid>
                                 </ListItem>
                             </Collapse>
                         </CardActionArea>
                     </Card>
-                    <Divider variant="inset" component="li" />
                 </List>
             </React.Fragment>
         );
