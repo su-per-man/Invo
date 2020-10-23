@@ -1,7 +1,7 @@
 import React from 'react';
-import { List, ListItem, ListItemAvatar, ListItemText, Grid, Box, Divider, Avatar, Typography, Card, CardActionArea, Collapse } from "@material-ui/core"
+import { List, ListItem, ListItemAvatar, ListItemText, Grid, Box, Divider, Avatar, Typography, Card, CardActionArea, Collapse, Button } from "@material-ui/core"
 import { green, red } from '@material-ui/core/colors'
-import { CallMade, CallReceived, Store } from '@material-ui/icons'
+import { CallMade, CallReceived, Comment, Extension, LocalOffer, ShoppingCart, Store } from '@material-ui/icons'
 
 export default class Dashboard extends React.Component {
     constructor() {
@@ -35,18 +35,21 @@ export default class Dashboard extends React.Component {
                             </ListItem>
                             <Collapse in={this.state.dyncamicCardExpand} timeout="auto" unmountOnExit>
                                 <ListItem>
-                                    <Grid container wrap="nowrap" spacing={2}>
-                                        <Grid item xs zeroMinWidth>
-                                            <ListItemText primary={<React.Fragment><Store /> Warehouse: </React.Fragment>} />
+                                    <Grid container spacing={2}>
+                                        <Grid item sm>
+                                            <Button aria-label="Warehouse" startIcon={<Store />}>WAREHOUSE</Button>
                                         </Grid>
-                                        <Grid item xs zeroMinWidth>
-                                            <ListItemText primary={<React.Fragment><CallMade /> CPU: </React.Fragment>} />
+                                        <Grid item sm>
+                                            <Button aria-label="Cost/Unit" startIcon={<LocalOffer />}>Cost/Unit</Button>
                                         </Grid>
-                                        <Grid item xs zeroMinWidth>
-                                            <ListItemText primary={<React.Fragment><CallMade /> Total Units: </React.Fragment>} />
+                                        <Grid item sm>
+                                            <Button aria-label="Total Units" startIcon={<ShoppingCart />}>Total Unit</Button>
                                         </Grid>
-                                        <Grid item xs zeroMinWidth>
-                                            <ListItemText primary={<React.Fragment><CallMade /> Item: </React.Fragment>} />
+                                        <Grid item sm>
+                                            <Button aria-label="Item" startIcon={<Extension />}>Item</Button>
+                                        </Grid>
+                                        <Grid item sm>
+                                            Hey there!!Hey there!!Hey there!!Hey there!!Hey there!!
                                         </Grid>
                                     </Grid>
                                 </ListItem>
@@ -54,12 +57,6 @@ export default class Dashboard extends React.Component {
                         </CardActionArea>
                     </Card>
                     <Divider variant="inset" component="li" />
-                    <ListItem alignItems="flex-start">
-                        <ListItemAvatar>
-                            <Avatar style={{ backgroundColor: red[500] }}> <CallMade /> </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary="Suman Kumar" secondary="September 14, 2016" />
-                    </ListItem>
                 </List>
             </React.Fragment>
         );
