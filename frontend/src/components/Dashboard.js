@@ -10,7 +10,7 @@ export default class Dashboard extends React.Component {
         super()
         this.state = {
             dyncamicCardExpand: {},
-            fetchedRows: []
+            fetchedRows: null
         }
     }
     handleClick = (id) => {
@@ -22,7 +22,7 @@ export default class Dashboard extends React.Component {
     }
     componentDidMount() {
         axios.get('/invo-api/transaction')
-            .then(resp => this.setState({ fetchedRows: resp.data }))
+            .then(resp => this.setState({ fetchedRows: resp.data || [] }))
     }
     render() {
         return (
@@ -30,10 +30,9 @@ export default class Dashboard extends React.Component {
                 <h1>Dashboard</h1 >
                 <List>
                     {
-                        (this.state.fetchedRows === [] && <Skeleton count={5} height={50} />)
+                        (this.state.fetchedRows === null && <Skeleton count={5} height={50} />)
                         ||
                         (
-                            this.state.fetchedRows !== [] &&
                             this.state.fetchedRows.map(t => {
                                 return (
                                     <Card>
