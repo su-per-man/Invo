@@ -43,8 +43,8 @@ export default class Transactions extends React.Component {
             .catch(this.handleError))
         Promise.all(promisesList).then(() => {
             this.setState({
-                columns: this.fetchedForm || [],
-                rows: this.fetchedRows || []
+                columns: this.fetchedForm,
+                rows: this.fetchedRows
             })
         })
     }
